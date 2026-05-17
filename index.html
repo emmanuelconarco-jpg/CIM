@@ -1,0 +1,4214 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CALBAYOG INTERACTIVE MAP (CIM)</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <style>
+      *{margin:0;padding:0;box-sizing:border-box}html{width:100%;height:100%}body{font-family:'Poppins',sans-serif;background:#1a1a2e;color:#e8e0d5;width:100%;height:100vh;max-height:100vh;display:flex;flex-direction:column;overflow:hidden}header{background:linear-gradient(135deg,#16213e 0%,#0f3460 100%);padding:10px 20px;display:flex;align-items:center;gap:14px;border-bottom:2px solid #e07b54;flex-shrink:0;z-index:1000;flex-wrap:wrap;min-height:60px}.htxt h1{font-size:24px;font-weight:700;color:#f4a56a;letter-spacing:.4px}.htxt p{font-size:16px;color:#8a9bb5;margin-top:1px}.hstats{display:flex;gap:18px;margin-left:auto}.hstat .v{font-size:24px;font-weight:700;color:#7ecac3;text-align:center}.hstat .l{font-size:14px;color:#6b7d93;text-transform:uppercase;letter-spacing:.5px}.layout{display:flex;flex:1;overflow:hidden;position:relative}.sidebar{width:320px;background:#1a2535;border-right:1px solid #2d3f55;border-radius:0 8px 8px 0;display:flex;flex-direction:column;overflow:hidden;position:fixed;left:0;top:70px;bottom:0;z-index:999;box-shadow:0 4px 12px rgba(0,0,0,.3);transition:all .3s ease}.sidebar.hidden{width:0;border-right:none;box-shadow:none}.sb-top{padding:20px 16px;background:linear-gradient(180deg,#1e2a3a 0%,#16213e 100%);border-bottom:2px solid #2d3f55;position:relative}.sb-header{display:flex;align-items:center;gap:7px;flex:1}.sb-top h3{font-size:18px;color:#f4a56a;text-transform:uppercase;letter-spacing:.7px;margin:0;font-weight:700;display:flex;align-items:center;gap:7px}.search-wrap{position:relative;margin-top:16px;margin-bottom:16px;padding:0 16px}.search{width:100%;padding:10px 12px;background:#0d1620;border:1.5px solid #2d3f55;border-radius:8px;color:#e8e0d5;font-size:16px;outline:none;transition:all .2s;font-family:'Poppins',sans-serif}.search::placeholder{color:#5a7088}.search:focus{border-color:#e07b54;background:#111827;box-shadow:0 0 0 3px rgba(224,123,84,.1)}.row2{display:flex;flex-direction:column;gap:10px;margin-top:12px;margin-bottom:16px;padding:0 16px}.filter-label{font-size:12px;color:#7ecac3;text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:4px;display:block}.sel{width:100%;padding:8px 14px;background:#0d1620;border:1.5px solid #2d3f55;border-radius:8px;color:#e8e0d5;font-size:14px;outline:none;cursor:pointer;transition:all .2s;font-family:'Poppins',sans-serif;font-weight:500;white-space:nowrap}.sel:hover{border-color:#4a6080;background:#111827}.sel:focus{border-color:#e07b54;background:#111827;box-shadow:0 0 0 3px rgba(224,123,84,.1)}.list-hdr{padding:12px 14px;font-size:15px;color:#f4a56a;border-bottom:1px solid #252f3f;font-weight:700;display:none;align-items:center;gap:6px;background:#0d1620}.blist{flex:1;overflow-y:auto;padding:12px 16px;margin-top:12px;background:#0d1620}.blist::-webkit-scrollbar{width:4px}.blist::-webkit-scrollbar-track{background:#0d1620}.blist::-webkit-scrollbar-thumb{background:#2d3f55;border-radius:2px}.blist::-webkit-scrollbar-thumb:hover{background:#3a4d63}.bitem{padding:12px 14px;border-radius:8px;cursor:pointer;border-left:4px solid transparent;margin-bottom:6px;transition:all .2s;background:#16213e;border:1px solid transparent}.bitem:hover{background:#1c2f42;border-left-color:#e07b54;transform:translateX(2px)}.bitem.active{background:#ffffff;border-left-color:#ffffff;border:1px solid rgba(200,200,200,0.5);box-shadow:0 0 8px rgba(255,255,255,0.3)}.bitem.active .bname{color:#1a1a2e;font-weight:700;text-shadow:none;font-size:16px}.bname{font-size:16px;font-weight:600;color:#e8e0d5;font-family:'Poppins',sans-serif;letter-spacing:.2px}.bmeta{display:none}.badge{display:inline-flex;align-items:center;padding:3px 7px;border-radius:4px;font-size:14px;font-weight:700;letter-spacing:.3px}.bd-Calbayog{background:rgba(153,204,255,.25);color:#99ccff;border:1px solid rgba(153,204,255,.4)}.bd-Oquendo{background:rgba(255,153,153,.25);color:#ff9999;border:1px solid rgba(255,153,153,.4)}.bd-Tinambacan{background:rgba(255,255,153,.25);color:#ffff99;border:1px solid rgba(255,255,153,.4)}.map-wrap{position:relative;flex:1;transition:all .3s ease}#map{width:100%;height:100%}.polygon-enhanced path{shape-rendering:geometricPrecision;vector-effect:non-scaling-stroke}.residential-area path{shape-rendering:geometricPrecision;vector-effect:non-scaling-stroke}.cbtn.residential{background:linear-gradient(135deg,#2ecc71 0%,#27ae60 100%);border-color:#27ae60;color:white}.cbtn.residential:hover{box-shadow:0 0 8px rgba(46,204,113,0.4)}.cbtn.residential.active{box-shadow:0 0 0 3px rgba(46,204,113,0.3)}.cbtn.road{background:linear-gradient(135deg,#ff4757 0%,#ff6b81 100%);border-color:#ff6b81;color:white}.cbtn.road:hover{box-shadow:0 0 8px rgba(255,71,87,0.4)}.cbtn.road.active{box-shadow:0 0 0 3px rgba(255,71,87,0.3)}.road-network-line{shape-rendering:geometricPrecision;vector-effect:non-scaling-stroke}.sb-open-btn{position:absolute;left:328px;top:50%;transform:translateY(-50%);z-index:500;background:rgba(22,33,62,.92);border:1px solid #2d3f55;border-radius:6px;color:#8a9bb5;font-size:18px;cursor:pointer;padding:8px 10px;backdrop-filter:blur(6px);transition:all .3s ease;width:40px;height:40px;display:flex;align-items:center;justify-content:center}.sb-open-btn:hover{border-color:#e07b54;color:#f4a56a}.sidebar.hidden~.map-wrap .sb-open-btn{left:12px}.ctrl-bar{position:absolute;top:12px;left:328px;right:auto;display:flex;gap:6px;z-index:500;justify-content:flex-start;align-items:center;transition:all .3s ease;flex-wrap:wrap;max-width:250px}.sidebar.hidden~.map-wrap .ctrl-bar{left:12px}.cbtn{padding:6px 11px;background:rgba(22,33,62,.92);border:1px solid #2d3f55;border-radius:6px;color:#8a9bb5;font-size:16px;cursor:pointer;backdrop-filter:blur(6px);transition:all .12s;white-space:nowrap}.cbtn:hover{border-color:#e07b54;color:#f4a56a}.cbtn.active{background:#1c3358;border-color:#e07b54;color:#f4a56a}.switch-container{display:flex;align-items:center;gap:8px}.switch-container.visible{display:flex}.switch{position:relative;display:inline-block;width:40px;height:22px}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#666;transition:.3s;border-radius:22px}.slider:before{position:absolute;content:"";height:18px;width:18px;left:2px;bottom:2px;background-color:white;transition:.3s;border-radius:50%}input:checked+.slider{background-color:#27a541}input:checked+.slider:before{transform:translateX(18px)}.switch-label{font-size:16px;color:#8a9bb5;white-space:nowrap;cursor:pointer;user-select:none}.devteam-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);z-index:1000}.devteam-modal-overlay.active{display:flex}.devteam-modal{background:rgba(255,255,255,0.03);border-radius:1rem;padding:1.25rem;width:min(100%,600px);aspect-ratio:4/4;max-height:90vh;box-shadow:0 8px 32px 0 rgba(0,0,0,0.37);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.18);color:#e5e7eb;position:relative;display:flex;flex-direction:column;overflow:auto;-webkit-overflow-scrolling:touch}.devteam-modal h2{margin-bottom:1rem;text-align:center;color:#f4a56a;font-size:22px}.devteam-close-btn{position:absolute;top:0.75rem;right:0.75rem;background:transparent;border:none;color:#e5e7eb;font-size:1.5rem;cursor:pointer;transition:all .2s}.devteam-close-btn:hover{color:#f4a56a}.devteam-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;flex:1;overflow-y:auto}.devteam-grid::-webkit-scrollbar{width:6px}.devteam-grid::-webkit-scrollbar-track{background:transparent}.devteam-grid::-webkit-scrollbar-thumb{background:#2d3f55;border-radius:3px}.devteam-grid::-webkit-scrollbar-thumb:hover{background:#3a4d63}.devteam-member{background:rgba(255,255,255,0.15);border-radius:0.75rem;padding:1rem;text-align:center;backdrop-filter:blur(5px);transition:all .2s;border:1px solid rgba(255,255,255,0.1)}.devteam-member:hover{background:rgba(255,255,255,0.2);border-color:rgba(255,255,255,0.2)}.devteam-member img{width:120px;height:120px;border-radius:50%;object-fit:cover;margin-bottom:0.5rem;box-shadow:0 4px 8px rgba(0,0,0,0.35);display:block;margin-left:auto;margin-right:auto}.devteam-member h3{margin:0.5rem 0 0.25rem;font-size:1rem;color:#ffffff}.devteam-member p{margin:0;font-size:0.85rem;opacity:0.85;color:#b0a898}.devteam-member-role{font-size:0.8rem;color:rgba(229,231,235,0.85);opacity:0.9;margin-top:0.25rem;line-height:1.3}.devteam-modal::-ms-overflow-style{none}.devteam-modal{scrollbar-width:none}.devteam-modal::-webkit-scrollbar{display:none}.leaflet-control-devteam{background:rgba(22,33,62,.95);border:1px solid #2d3f55;border-radius:8px;padding:2px;z-index:500;backdrop-filter:blur(6px);transition:all .3s ease;box-shadow:0 2px 8px rgba(0,0,0,.3);margin-bottom:6px}.devteam-ctrl-btn{display:flex;align-items:center;justify-content:center;width:38px;height:38px;padding:0;background:linear-gradient(135deg,#7c3aed 0%,#6366f1 100%);border:1px solid #6366f1;border-radius:6px;color:white;font-size:18px;cursor:pointer;transition:all .2s;box-shadow:0 2px 4px rgba(0,0,0,.2)}.devteam-ctrl-btn svg{width:20px;height:20px}.devteam-ctrl-btn:hover{background:linear-gradient(135deg,#8b5cf6 0%,#7c3aed 100%);box-shadow:0 0 8px rgba(124,58,237,0.4);transform:translateY(-1px)}.devteam-ctrl-btn:active{transform:translateY(0)}.leaflet-bottom.leaflet-right .leaflet-control-layers{position:relative;right:50px;bottom:-50px;margin-bottom:9px;transform:translateY(2px)}.leaflet-bottom.leaflet-right .leaflet-control-layers-toggle{width:38px;height:38px;padding:0;display:flex;align-items:center;justify-content:center;transform:translateY(2px)}.leaflet-control-devteam{margin-bottom:6px}.info-panel{position:absolute;top:8px;right:12px;bottom:auto;width:200px;background:rgba(16,25,46,.97);border:1px solid #2d3f55;border-radius:8px;padding:10px 10px;z-index:600;backdrop-filter:blur(10px);display:none;max-height:70vh;overflow-y:auto}.info-panel.show{display:block}.info-panel::-webkit-scrollbar{width:4px}.info-panel::-webkit-scrollbar-track{background:transparent}.info-panel::-webkit-scrollbar-thumb{background:#2d3f55;border-radius:2px}.info-panel::-webkit-scrollbar-thumb:hover{background:#3a4d63}.ip-close{position:absolute;top:5px;right:7px;background:none;border:none;color:#4a5f74;font-size:13px;cursor:pointer;line-height:1}.ip-close:hover{color:#e8e0d5}.ip-name{font-size:13px;font-weight:700;color:#f4a56a;margin-bottom:6px;padding-right:14px}.ip-district{display:none}.ip-row{display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #1e2a3a}.ip-row:last-child{border:none}.ip-lbl{font-size:11px;color:#6b7d93}.ip-val{font-size:11px;font-weight:600;color:#d8d0c5;text-align:right}.legend{position:absolute;bottom:12px;left:328px;right:auto;background:rgba(16,25,46,.93);border:1px solid #2d3f55;border-radius:8px;padding:8px 10px;z-index:500;backdrop-filter:blur(6px);min-width:140px;transition:all .3s ease}.sidebar.hidden~.map-wrap .legend{left:12px}.leg-title{font-size:13px;color:#6b7d93;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}.leg-item{display:flex;align-items:center;gap:8px;margin-bottom:3px;font-size:14px;color:#b8b0a5}.leg-swatch{width:14px;height:14px;border-radius:3px;flex-shrink:0;border:1px solid rgba(255,255,255,.08)}.leg-gradient{height:10px;border-radius:3px;margin-bottom:4px;background:linear-gradient(to right,#1e40af,#f59e0b,#dc2626)}.leg-scale{display:flex;justify-content:space-between;font-size:14px;color:#6b7d93}.ip-officials{margin-top:6px;border-top:1px solid #2d3f55;padding-top:5px}.ip-off-title{font-size:10px;color:#6b7d93;text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px}.ip-off-row{display:flex;flex-direction:column;padding:2px 0;border-bottom:1px solid #1a2535}.ip-off-row:last-child{border:none}.ip-off-pos{font-size:10px;color:#6b7d93;margin-bottom:1px}.ip-off-name{font-size:11px;font-weight:600;color:#d8d0c5}.ip-sb-list{font-size:11px;color:#b0a898;line-height:1.4}.leaflet-tooltip-cb{background:transparent!important;border:none!important;color:#ffffff!important;font-size:18px!important;padding:6px 10px!important;border-radius:0!important;box-shadow:none!important;font-weight:500!important}.label-marker .label-text{transition:all 0.2s ease-out!important;filter:drop-shadow(0 0 3px rgba(0,0,0,0.9))}.label-marker:hover .label-text{filter:drop-shadow(0 0 8px rgba(224,123,84,0.8))}svg path{outline:none;border:none}svg path:focus{outline:none}.leaflet-interactive{outline:none!important}.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:1001;align-items:center;justify-content:center}.modal-overlay.show{display:flex}.modal-dialog{background:#1a2535;border:2px solid #e07b54;border-radius:12px;padding:30px;max-width:400px;text-align:center}.modal-title{font-size:25px;font-weight:700;color:#f4a56a;margin-bottom:15px}.modal-text{font-size:19px;color:#d8d0c5;margin-bottom:20px;line-height:1.5}.modal-buttons{display:flex;gap:10px;justify-content:center}.modal-btn{padding:10px 20px;border:1px solid #e07b54;border-radius:6px;background:#16213e;color:#f4a56a;font-size:18px;cursor:pointer;transition:all .2s}.modal-btn:hover{background:#1c3358;color:#ffffff}.modal-btn.primary{background:#e07b54;color:#ffffff}.modal-btn.primary:hover{background:#ff8c5a}@media (max-width:1024px){.sidebar{width:280px}.sb-open-btn{left:288px}.ctrl-bar{left:288px}.legend{left:288px}.hstats{gap:12px}.hstat .v{font-size:20px}.hstat .l{font-size:11px}}@media (max-width:768px){body{height:auto;min-height:100vh}.layout{flex-direction:column}header{padding:12px 16px;flex-wrap:wrap}.hicon{font-size:24px}.htxt h1{font-size:20px}.htxt p{font-size:13px}.hstats{gap:8px;flex-wrap:wrap}.hstat .v{font-size:18px}.hstat .l{font-size:10px}.sidebar{width:100%;position:static;height:auto;max-height:50vh;border-right:none;border-bottom:1px solid #2d3f55;border-radius:0}.sidebar.hidden{width:100%;height:0;overflow:hidden}.sb-open-btn{display:none}.ctrl-bar{position:relative;left:0!important;top:0!important;margin-top:8px;padding:0 12px}.legend{position:relative;left:0!important;bottom:0!important;margin:8px 12px}.blist{padding:8px}.bitem{padding:10px 12px;margin-bottom:4px}.bname{font-size:15px}.search{font-size:14px;padding:8px 10px 8px 32px}.sel{font-size:14px;padding:8px 10px}.filter-label{font-size:11px}.map-wrap{height:50vh;min-height:400px}}@media (max-width:480px){header{padding:10px 12px}.hicon{font-size:20px}.htxt h1{font-size:16px}.htxt p{font-size:12px}.hstats{gap:6px;margin-left:auto}.hstat{flex:0 1 auto}.hstat .v{font-size:16px}.hstat .l{font-size:9px}.sb-top{padding:12px}.sb-top h3{font-size:15px}.search-wrap{margin-bottom:10px}.search{font-size:13px;padding:8px 10px 8px 30px}.search-icon{font-size:12px;left:8px}.row2{gap:8px;margin-top:8px}.filter-label{font-size:10px;margin-bottom:2px}.sel{font-size:13px;padding:8px 10px}.list-hdr{padding:10px 12px;font-size:13px}.bitem{padding:10px;margin-bottom:3px}.bname{font-size:14px}.map-wrap{height:40vh;min-height:300px}.ctrl-bar{flex-wrap:wrap;gap:4px;padding:0 8px}.cbtn{padding:6px 9px;font-size:12px}.switch-label{font-size:12px}.info-panel{width:90vw;max-width:300px}.modal-dialog{max-width:90vw;padding:20px}}.landing-overlay{position:fixed;top:0;left:0;right:0;bottom:0;z-index:2000;background:linear-gradient(135deg,#0f1419 0%,#1a1a2e 100%);display:flex;align-items:center;justify-content:center;padding:40px 20px;overflow-y:auto;opacity:1;transition:opacity 0.6s ease,visibility 0.6s ease;visibility:visible}.landing-overlay.hidden{opacity:0;visibility:hidden;pointer-events:none}.landing-content{max-width:900px;width:100%;background-image:linear-gradient(rgba(22,33,62,0.85),rgba(22,33,62,0.85)),url('http://calbayog.gov.ph/wp-content/uploads/2025/10/SPLASHSCREENCALBAYOGLOGO.png');background-repeat:no-repeat;background-position:center center;background-size:contain;border:1px solid #2d3f55;border-radius:16px;padding:60px 40px;backdrop-filter:blur(10px);text-align:center}.landing-logo{font-size:40px;font-weight:700;color:#f4a56a;margin-bottom:20px;letter-spacing:1px}.landing-subtitle{font-size:25px;color:#8a9bb5;margin-bottom:20px}.landing-title{font-size:48px;font-weight:700;color:#ffffff;margin-bottom:20px;line-height:1.2}.landing-title .highlight{color:#f4a56a}.landing-description{font-size:18px;color:#b0a898;margin-bottom:40px;line-height:1.6;max-width:700px;margin-left:auto;margin-right:auto}.landing-stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:20px;margin-bottom:40px}.landing-stat-card{background:rgba(45,63,85,0.5);border:1px solid #2d3f55;border-radius:12px;padding:20px;backdrop-filter:blur(10px)}.landing-stat-value{font-size:28px;font-weight:700;color:#7ecac3;margin-bottom:6px}.landing-stat-label{font-size:12px;color:#8a9bb5;text-transform:uppercase;letter-spacing:0.5px}.landing-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}.landing-btn{padding:14px 32px;border-radius:8px;border:none;font-size:16px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;transition:all 0.3s ease;text-decoration:none;display:inline-block}.landing-btn-primary{background:linear-gradient(135deg,#7c3aed 0%,#6366f1 100%);color:white;border:1px solid #6366f1}.landing-btn-primary:hover{background:linear-gradient(135deg,#8b5cf6 0%,#7c3aed 100%);box-shadow:0 0 20px rgba(124,58,237,0.4);transform:translateY(-2px)}@media (max-width:768px){.landing-content{padding:40px 20px}.landing-title{font-size:32px}.landing-description{font-size:16px}.landing-stats-grid{grid-template-columns:repeat(2,1fr)}}@media (max-width:480px){.landing-content{padding:30px 16px}.landing-title{font-size:24px}.landing-description{font-size:14px}.landing-stats-grid{grid-template-columns:1fr;gap:12px}.landing-btn{padding:12px 24px;font-size:14px}.landing-cta{flex-direction:column}.landing-btn{width:100%}}
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="htxt">
+        <h1>CALBAYOG INTERACTIVE MAP (CIM)</h1>
+        <p>
+          Samar, Eastern Visayas, Philippines &nbsp;.&nbsp; PRS92 / UTM Zone 51N
+        </p>
+      </div>
+      <div class="hstats">
+        <div class="hstat">
+          <div class="v">157</div>
+          <div class="l">Barangays</div>
+        </div>
+        <div class="hstat">
+          <div class="v">3</div>
+          <div class="l">Districts</div>
+        </div>
+        <div class="hstat">
+          <div class="v">161,628</div>
+          <div class="l">Population</div>
+        </div>
+        <div class="hstat">
+          <div class="v">2,543</div>
+          <div class="l">km²</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- LANDING PAGE OVERLAY
+  Temporarily hidden for WordPress embed. To restore, remove the `hidden` class
+  and the inline `style="display:none"` on this element, or call `launchMap()`.
+-->
+    <div
+      class="landing-overlay hidden"
+      id="landingOverlay"
+      style="display: none"
+    >
+      <div class="landing-content">
+        <div class="landing-logo">CIM</div>
+        <div class="landing-subtitle">Calbayog Interactive Map</div>
+        <h1 class="landing-title">
+          Explore <span class="highlight">Calbayog</span> Municipality
+        </h1>
+        <p class="landing-description">
+          An advanced geospatial platform featuring interactive district and
+          barangay mapping, real-time data visualization, comprehensive
+          administrative information, and detailed municipal insights.
+        </p>
+
+        <div class="landing-stats-grid">
+          <div class="landing-stat-card">
+            <div class="landing-stat-value">157</div>
+            <div class="landing-stat-label">Barangays</div>
+          </div>
+          <div class="landing-stat-card">
+            <div class="landing-stat-value">3</div>
+            <div class="landing-stat-label">Districts</div>
+          </div>
+          <div class="landing-stat-card">
+            <div class="landing-stat-value">161.6K</div>
+            <div class="landing-stat-label">Population</div>
+          </div>
+          <div class="landing-stat-card">
+            <div class="landing-stat-value">2,543</div>
+            <div class="landing-stat-label">km²</div>
+          </div>
+        </div>
+
+        <div class="landing-cta">
+          <button class="landing-btn landing-btn-primary" onclick="launchMap()">
+            Launch Interactive Map
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="sidebar" id="sidebar">
+        <div class="sb-top">
+          <div class="sb-header">
+            <h3>Barangay Directory</h3>
+          </div>
+        </div>
+        <div class="search-wrap">
+          <input
+            class="search"
+            type="text"
+            id="searchBox"
+            placeholder="Search barangay..."
+          />
+        </div>
+        <div class="row2">
+          <select class="sel" id="distFilter">
+            <option value="">All Districts</option>
+            <option value="Calbayog">Calbayog (84)</option>
+            <option value="Oquendo">Oquendo (46)</option>
+            <option value="Tinambacan">Tinambacan (27)</option>
+          </select>
+        </div>
+        <div class="list-hdr" id="listHdr">157 barangays</div>
+        <div class="blist" id="bList"></div>
+      </div>
+
+      <div class="map-wrap">
+        <div id="map"></div>
+        <button
+          class="sb-open-btn"
+          id="sbOpenBtn"
+          onclick="toggleSidebar()"
+          title="Hide sidebar"
+        >
+          ◀
+        </button>
+
+        <div class="ctrl-bar">
+          <select class="sel" id="modeSelector" onchange="setMode(this.value)">
+            <option value="district">District</option>
+            <option value="pop">Population</option>
+            <option value="area">Land Area</option>
+          </select>
+          <div class="switch-container">
+            <label class="switch">
+              <input type="checkbox" id="btnLabels" onchange="toggleLabels()" />
+              <span class="slider"></span>
+            </label>
+            <label class="switch-label" for="btnLabels">Show Names</label>
+          </div>
+          <button
+            class="cbtn residential"
+            id="btnResidential"
+            onclick="toggleResidential()"
+            title="Show/Hide residential areas"
+          >
+            Residential
+          </button>
+          <button
+            class="cbtn road"
+            id="btnRoad"
+            onclick="toggleRoads()"
+            title="Show/Hide road network"
+          >
+            Roads
+          </button>
+        </div>
+
+        <div class="info-panel" id="infoPanel">
+          <button class="ip-close" onclick="closeInfo()">x</button>
+          <div class="ip-name" id="ipName">—</div>
+          <div class="ip-district" id="ipDistrict">—</div>
+          <div class="ip-row">
+            <span class="ip-lbl">Barangay Code</span
+            ><span class="ip-val" id="ipCode">—</span>
+          </div>
+          <div class="ip-row">
+            <span class="ip-lbl">Land Area</span
+            ><span class="ip-val" id="ipArea">—</span>
+          </div>
+          <div class="ip-row">
+            <span class="ip-lbl">Projected Population</span
+            ><span class="ip-val" id="ipPop">—</span>
+          </div>
+          <div
+            class="ip-officials"
+            id="ipOfficialsSection"
+            style="display: none"
+          >
+            <div class="ip-off-title">Barangay Officials</div>
+            <div class="ip-off-row">
+              <div class="ip-off-pos">Punong Barangay</div>
+              <div class="ip-off-name" id="ipPunong">—</div>
+            </div>
+            <div class="ip-off-row">
+              <div class="ip-off-pos">Sangguniang Barangay Members</div>
+              <div class="ip-sb-list" id="ipSBMembers">—</div>
+            </div>
+            <div class="ip-off-row">
+              <div class="ip-off-pos">SK Chairperson</div>
+              <div class="ip-off-name" id="ipSKChair">—</div>
+            </div>
+            <div class="ip-off-row">
+              <div class="ip-off-pos">Barangay Secretary</div>
+              <div class="ip-off-name" id="ipSecretary">—</div>
+            </div>
+            <div class="ip-off-row">
+              <div class="ip-off-pos">Barangay Treasurer</div>
+              <div class="ip-off-name" id="ipTreasurer">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="legend" id="mapLegend">
+          <div class="leg-title" id="legTitle">District</div>
+          <div class="leg-items" id="legItems">
+            <div class="leg-item">
+              <div class="leg-swatch" style="background: #99ccff"></div>
+              Calbayog (84)
+            </div>
+            <div class="leg-item">
+              <div class="leg-swatch" style="background: #ff9999"></div>
+              Oquendo (46)
+            </div>
+            <div class="leg-item">
+              <div class="leg-swatch" style="background: #ffff99"></div>
+              Tinambacan (27)
+            </div>
+          </div>
+          <div
+            style="
+              margin-top: 12px;
+              padding-top: 8px;
+              border-top: 1px solid rgba(255, 255, 255, 0.2);
+              font-size: 11px;
+              color: #7ecac3;
+              text-align: center;
+            "
+          >
+            ✓ Accuracy Enhanced<br /><small>UTM→WGS84 Optimized</small>
+          </div>
+        </div>
+
+        <!-- Dev Team Modal -->
+        <div class="devteam-modal-overlay" id="devteamModalOverlay">
+          <div class="devteam-modal">
+            <button
+              class="devteam-close-btn"
+              id="devteamCloseBtn"
+              onclick="closeDevTeamModal()"
+            >
+              &times;
+            </button>
+            <h2>ICT Development Team</h2>
+            <div class="devteam-grid" id="devteamGrid">
+              <!-- Team members will be generated by JavaScript -->
+            </div>
+          </div>
+        </div>
+        Dev Team Modal backup end
+      </div>
+    </div>
+
+    <!-- Barangay polygons + optional layers: keep these four files together (or update src URLs for WordPress Media). -->
+    <script src="Calbayog_Boundary.js"></script>
+    <script src="residential_data.js"></script>
+    <script src="road_network_data.js"></script>
+
+    <script>
+      // Landing page transition
+      function launchMap() {
+        const overlay = document.getElementById("landingOverlay");
+        if (overlay) {
+          overlay.classList.add("hidden");
+          setTimeout(() => (overlay.style.display = "none"), 600);
+        }
+      }
+
+      // Ensure function is available globally (helps when embedded in WordPress)
+      window.launchMap = launchMap;
+
+      // Fallback: bind click handler in case `onclick` attributes are stripped (e.g., WordPress)
+      document.addEventListener("DOMContentLoaded", function () {
+        const btn = document.querySelector(".landing-btn-primary");
+        if (btn) {
+          btn.removeEventListener("click", launchMap);
+          btn.addEventListener("click", launchMap);
+        }
+
+        // Auto-hide landing overlay when embedded in another page (iframe/WordPress)
+        try {
+          if (window.self !== window.top) {
+            const overlay = document.getElementById("landingOverlay");
+            if (overlay) {
+              overlay.classList.add("hidden");
+              setTimeout(() => (overlay.style.display = "none"), 600);
+            }
+          }
+        } catch (e) {
+          /* cross-origin frame access might throw */
+        }
+      });
+
+      // District colors — blue / red / yellow
+      const DC = {
+        Calbayog: "#99ccff",
+        Oquendo: "#ff9999",
+        Tinambacan: "#ffff99",
+      };
+
+     
+      // Darker variants to use when a district/barangay is active/selected
+      const DC_ACTIVE = {
+        Calbayog: "#4aa3d6",
+        Oquendo: "#ff6b6b",
+        Tinambacan: "#d4d400",
+      };
+
+      // Init map
+      const map = L.map("map", {
+        preferCanvas: true,
+        center: [12.09, 124.6],
+        zoom: 11,
+        zoomControl: false,
+        minZoom: 10,
+        maxZoom: 20,
+        touchZoom: true,
+        pinchToZoom: true,
+      });
+
+      const streetTile = L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+        {
+          attribution: "© OpenStreetMap · CARTO",
+          maxZoom: 20,
+        },
+      ).addTo(map);
+
+      const darkTile = L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+        {
+          attribution: "© OpenStreetMap · CARTO",
+          maxZoom: 20,
+        },
+      );
+
+      const osmTile = L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+          attribution: "© OpenStreetMap",
+          maxZoom: 20,
+        },
+      );
+
+      /* Dev Team Control backup start*/
+      const DevTeamControl = L.Control.extend({
+        options: { position: "bottomright" },
+        onAdd: function (map) {
+          const container = L.DomUtil.create(
+            "div",
+            "leaflet-control-devteam leaflet-bar",
+          );
+          const btn = L.DomUtil.create("button", "devteam-ctrl-btn", container);
+          btn.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+    `;
+          btn.title = "View development team";
+          btn.setAttribute("aria-label", "View development team");
+          L.DomEvent.on(btn, "click", (e) => {
+            L.DomEvent.stopPropagation(e);
+            openDevTeamModal();
+          });
+          return container;
+        },
+      });
+      new DevTeamControl().addTo(map);
+      /*  Dev Team Control backup end */
+
+      L.control
+        .layers(
+          {
+            "Streets (CartoDB Positron)": streetTile,
+            "Dark (CARTO)": darkTile,
+            OpenStreetMap: osmTile,
+          },
+          {},
+          { position: "bottomright" },
+        )
+        .addTo(map);
+
+      // Ensure road and residential layers stay properly positioned when basemap changes
+      // This maintains alignment and z-ordering across all tile layer switches
+      map.on("baselayerchange", (e) => {
+        // Layer ordering: basemap → overlays (residential, roads) → labels
+        // Bringing overlays to front after basemap change ensures proper rendering
+        if (residentialLayer && map.hasLayer(residentialLayer)) {
+          residentialLayer.bringToFront();
+        }
+        if (roadsLayer && map.hasLayer(roadsLayer)) {
+          roadsLayer.bringToFront();
+        }
+        if (labelLayer) {
+          labelLayer.bringToFront();
+        }
+
+        // Log for debugging
+        console.log("Basemap switched:", e.name, "- Overlay layers reordered");
+      });
+
+      // Add zoom event listener for label scaling
+      map.on("zoom", updateLabelsOnZoom);
+
+      // Deselect polygons when clicking outside of them
+      map.on("click", function (e) {
+        // Check if clicked on a layer or on a label marker
+        let clickedLayer = false;
+        if (e.originalEvent && e.originalEvent.target) {
+          const target = e.originalEvent.target;
+          if (
+            target.closest &&
+            target.closest(
+              ".label-marker, .selected-label-marker, .leaflet-marker-icon",
+            )
+          ) {
+            clickedLayer = true;
+          }
+        }
+        if (geoLayer) {
+          geoLayer.eachLayer((layer) => {
+            if (
+              e.latlng &&
+              layer.getBounds &&
+              layer.getBounds().contains(e.latlng)
+            ) {
+              clickedLayer = true;
+            }
+          });
+        }
+        // If not clicked on a polygon, deselect
+        if (!clickedLayer && selectedName) {
+          closeInfo();
+        }
+      });
+
+      // Tooltip style
+      const ts = document.createElement("style");
+      ts.textContent = `.leaflet-tooltip-cb{background:rgba(16,25,46,.97)!important;border:1px solid #2d3f55!important;color:#e8e0d5!important;font-size:12px!important;padding:6px 10px!important;border-radius:6px!important;box-shadow:0 4px 16px rgba(0,0,0,.6)!important;}.leaflet-tooltip-cb::before{display:none!important;}`;
+      document.head.appendChild(ts);
+
+      // ============================================================
+      // ENHANCED UTM TO WGS84 CONVERTER FOR PRS92 DATUM
+      // Improves polygon accuracy for Calbayog municipality
+      // ============================================================
+      class EnhancedUTMConverter {
+        constructor() {
+          this.K0 = 0.9996; // UTM scale factor
+          this.A = 6378206.4; // Semi-major axis (Clarke 1866)
+          this.B = 6356583.8; // Semi-minor axis (Clarke 1866)
+          this.E2 = 0.00669438; // First eccentricity squared
+          this.E = Math.sqrt(this.E2);
+          this.EPRIME2 = this.E2 / (1 - this.E2);
+          this.ZONE = 51; // UTM Zone for Calbayog
+          this.CENTRAL_MERIDIAN = 123; // Central meridian for Zone 51
+          this.FALSE_EASTING = 500000; // UTM false easting
+          this.FALSE_NORTHING = 0; // UTM false northing
+        }
+        convertToWGS84(easting, northing) {
+          const x = easting - this.FALSE_EASTING;
+          const y = northing - this.FALSE_NORTHING;
+          const m = y / this.K0;
+          const mu =
+            m /
+            (this.A *
+              (1 -
+                this.E2 / 4 -
+                (3 * this.E2 * this.E2) / 64 -
+                (5 * this.E2 * this.E2 * this.E2) / 256));
+          let footpointLat =
+            mu +
+            ((3 * this.E2) / 8 +
+              (3 * this.E2 * this.E2) / 32 -
+              (45 * this.E2 * this.E2 * this.E2) / 1024) *
+              Math.sin(2 * mu) +
+            ((15 * this.E2 * this.E2) / 256 +
+              (45 * this.E2 * this.E2 * this.E2) / 1024) *
+              Math.sin(4 * mu) +
+            ((35 * this.E2 * this.E2 * this.E2) / 3072) * Math.sin(6 * mu);
+          const c1 =
+            this.EPRIME2 * Math.cos(footpointLat) * Math.cos(footpointLat);
+          const t1 = Math.tan(footpointLat) * Math.tan(footpointLat);
+          const n1 =
+            this.A /
+            Math.sqrt(
+              1 - this.E2 * Math.sin(footpointLat) * Math.sin(footpointLat),
+            );
+          const r1 =
+            (this.A * (1 - this.E2)) /
+            Math.pow(
+              1 - this.E2 * Math.sin(footpointLat) * Math.sin(footpointLat),
+              1.5,
+            );
+          const d = x / (n1 * this.K0);
+          const latRad =
+            footpointLat -
+            ((n1 * Math.tan(footpointLat)) / r1) *
+              ((d * d) / 2 -
+                ((d * d * d * d) / 24) *
+                  (5 + 3 * t1 + 10 * c1 - 4 * c1 * c1 - 9 * this.EPRIME2) +
+                ((d * d * d * d * d * d) / 720) *
+                  (61 +
+                    90 * t1 +
+                    28 * t1 * t1 +
+                    45 * this.EPRIME2 -
+                    252 * this.EPRIME2 * t1 -
+                    3 * this.EPRIME2 * this.EPRIME2));
+          const lngRad =
+            (d -
+              ((d * d * d) / 6) * (1 + 2 * t1 + c1) +
+              ((d * d * d * d * d) / 120) *
+                (5 -
+                  2 * c1 +
+                  28 * t1 -
+                  3 * c1 * c1 -
+                  8 * this.EPRIME2 * t1 -
+                  24 * t1 * t1)) /
+            Math.cos(footpointLat);
+          const lng = this.CENTRAL_MERIDIAN + (lngRad * 180) / Math.PI;
+          const lat = (latRad * 180) / Math.PI;
+          return [lng, lat];
+        }
+      }
+
+      // Polygon Quality Enhancement Utilities
+      const PolygonEnhancements = {
+        analyzeAccuracy(geojson) {
+          const stats = {
+            featureCount: geojson.features.length,
+            bounds: {
+              minLng: Infinity,
+              maxLng: -Infinity,
+              minLat: Infinity,
+              maxLat: -Infinity,
+            },
+          };
+          geojson.features.forEach((feat) => {
+            if (feat.geometry.type === "Polygon") {
+              feat.geometry.coordinates[0].forEach((coord) => {
+                stats.bounds.minLng = Math.min(stats.bounds.minLng, coord[0]);
+                stats.bounds.maxLng = Math.max(stats.bounds.maxLng, coord[0]);
+                stats.bounds.minLat = Math.min(stats.bounds.minLat, coord[1]);
+                stats.bounds.maxLat = Math.max(stats.bounds.maxLat, coord[1]);
+              });
+            }
+          });
+          const lngRange = stats.bounds.maxLng - stats.bounds.minLng;
+          const latRange = stats.bounds.maxLat - stats.bounds.minLat;
+          stats.aspectRatio = lngRange / latRange;
+          stats.quality =
+            stats.aspectRatio >= 1.15 && stats.aspectRatio <= 1.45
+              ? "EXCELLENT"
+              : stats.aspectRatio >= 1.0 && stats.aspectRatio <= 1.6
+                ? "GOOD"
+                : "FAIR";
+          return stats;
+        },
+      };
+
+      // Analyze and log polygon quality on load
+      const polygonQuality = PolygonEnhancements.analyzeAccuracy(GEOJSON);
+      console.log(
+        "??? Polygon Quality Analysis:",
+        polygonQuality.quality,
+        "Aspect Ratio:",
+        polygonQuality.aspectRatio.toFixed(3),
+      );
+
+      // Note: RESIDENTIAL_GEOJSON is loaded from a/residential_data.js
+
+      // Note: Both data files already export variables with _WGS84 suffix
+      // const RESIDENTIAL_GEOJSON_WGS84 = typeof RESIDENTIAL_GEOJSON !== 'undefined' ? RESIDENTIAL_GEOJSON : null;
+      // const ROAD_NETWORK_GEOJSON_WGS84 = typeof ROAD_NETWORK_GEOJSON !== 'undefined' ? ROAD_NETWORK_GEOJSON : null;
+
+      let currentMode = "district";
+      let geoLayer = null;
+      let residentialLayer = null;
+      let roadsLayer = null;
+      let selectedName = null;
+      let selectedDistrict = null;
+      let labelsVisible = false;
+      let labelLayer = null;
+      let selectedLabelLayer = null;
+
+      // Validate road network data is properly aligned (WGS84 coordinates, same CRS as barangays)
+      if (
+        typeof ROAD_NETWORK_GEOJSON_WGS84 !== "undefined" &&
+        ROAD_NETWORK_GEOJSON_WGS84
+      ) {
+        console.log(
+          "✓ Road network data loaded (WGS84)",
+          ROAD_NETWORK_GEOJSON_WGS84.features.length,
+          "features",
+        );
+      } else {
+        console.warn("⚠ Road network data not available");
+      }
+
+      // Validate residential data is properly aligned
+      if (
+        typeof RESIDENTIAL_GEOJSON_WGS84 !== "undefined" &&
+        RESIDENTIAL_GEOJSON_WGS84
+      ) {
+        console.log(
+          "✓ Residential data loaded (WGS84)",
+          RESIDENTIAL_GEOJSON_WGS84.features.length,
+          "features",
+        );
+      } else {
+        console.warn("⚠ Residential data not available");
+      }
+
+      // Color scales
+      const maxPop = Math.max(
+        ...GEOJSON.features.map((f) => f.properties.POP_PROJEC || 0),
+      );
+      const maxArea = Math.max(
+        ...GEOJSON.features.map((f) => f.properties.LAND_AREA || 0),
+      );
+
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
+      function getSelectionZoom(bounds, props) {
+        const fitZoom = map.getBoundsZoom(bounds, false, [120, 120]);
+        const minZoom = 14;
+        const maxSelectionZoom = 16;
+        const area = (props && props.LAND_AREA) || 0;
+        const sizeFactor = maxArea ? area / maxArea : 1;
+        const extraZoom = sizeFactor <= 0.03 ? 1 : sizeFactor <= 0.08 ? 0.5 : 0;
+        const desiredZoom = Math.max(fitZoom + extraZoom, minZoom);
+        const zoomCap = Math.min(
+          desiredZoom,
+          map.getZoom() + 2,
+          maxSelectionZoom,
+        );
+        return Math.max(map.getZoom(), zoomCap);
+      }
+      function popColor(val) {
+        // Yellow ? Orange
+        const t = Math.sqrt((val || 0) / maxPop);
+        const r = Math.round(lerp(255, 255, t)),
+          g = Math.round(lerp(255, 140, t)),
+          b2 = Math.round(lerp(0, 0, t));
+        return `rgb(${r},${g},${b2})`;
+      }
+      function areaColor(val) {
+        // Light blue ? Dark navy
+        const t = Math.sqrt((val || 0) / maxArea);
+        const r = Math.round(lerp(135, 25, t)),
+          g = Math.round(lerp(206, 25, t)),
+          b2 = Math.round(lerp(235, 112, t));
+        return `rgb(${r},${g},${b2})`;
+      }
+      function cadastreColor(s) {
+        if (s === "Surveyed") return "#7ecac3";
+        if (s === "Un-Surveyed") return "#e07b54";
+        return "#6b7d93";
+      }
+
+      function getFill(props) {
+        if (currentMode === "district") {
+          if (!selectedName && !selectedDistrict) return "#87ceeb";
+          if (selectedDistrict) {
+            return props.DISTRICT_N === selectedDistrict
+              ? DC[props.DISTRICT_N] || "#87ceeb"
+              : "#87ceeb";
+          }
+          return DC[props.DISTRICT_N] || "#87ceeb";
+        }
+        if (currentMode === "pop") return popColor(props.POP_PROJEC);
+        if (currentMode === "area") return areaColor(props.LAND_AREA);
+        if (currentMode === "cadastre") return cadastreColor(props.CADASTRE_S);
+        return "#64748b";
+      }
+
+      function fmtArea(sqm) {
+        if (!sqm) return "�";
+        return sqm > 1000000
+          ? (sqm / 1000000).toFixed(2) + " km²"
+          : (sqm / 10000).toFixed(1) + " ha";
+      }
+
+      const OFFICIALS = {
+        Acedillo: {
+          punong: "Jovito M. Antivo",
+          secretary: "Loida Llander",
+          treasurer: "Marites Caber",
+          sk_chair: "Jessane Caber",
+          sb_members: [
+            "Geraldino Arcallana JR",
+            "Teresita Montabon",
+            "Julia Lagang",
+            "Romeo Caber",
+            "Jonathan Dimakiling",
+            "Pio Corsiga",
+            "Manidan Porlares",
+          ],
+        },
+        "Aguit-itan": {
+          punong: "Fernando Cagomoc",
+          secretary: "Jeffrey Ramos",
+          treasurer: "Ma. Malah Sta Ana",
+          sk_chair: "Lourd Eute Bonguet",
+          sb_members: [
+            "Arvin Pacheco",
+            "Gomer Azcuna JR",
+            "Leo Pensaber",
+            "Salve Luz Dignos",
+            "Justo Norcio",
+            "Alexander Baylon",
+            "Romeo Susmena",
+          ],
+        },
+        Alibaba: {
+          punong: "Joey Mensones",
+          secretary: "Ryan Buscagan",
+          treasurer: "Jonel Berba",
+          sk_chair: "Charles Trimidal",
+          sb_members: [
+            "Alex Aragon",
+            "Francisco Berba",
+            "Dolores Pitao",
+            "Flora Ulila",
+            "Randy Legaspi",
+            "Bruno Demeterio",
+            "Edgar Degamon",
+          ],
+        },
+        Amampacang: {
+          punong: "Cresilda Flor",
+          secretary: "Analiza Barandino",
+          treasurer: "Aldrin Omila",
+          sk_chair: "Mark Anthony Amparado",
+          sb_members: [
+            "Ardian Potal",
+            "Juanita Rojas",
+            "John Villasis",
+            "Andrey Dela Buena",
+            "Rufa Caber",
+            "Glenn Semillano",
+            "Roger Pajanonot",
+          ],
+        },
+        Anislag: {
+          punong: "Valeriano Marmito",
+          secretary: "Buna Chiquillo",
+          treasurer: "Carina Cadiong",
+          sk_chair: "Fransine Bescoro",
+          sb_members: [
+            "Jeric Doroja",
+            "Renato Mopas",
+            "Tomasa Amador",
+            "Bebiana Dela Buena",
+            "Angela Canaman",
+            "Harris Magallon",
+            "Christian Tan",
+          ],
+        },
+        "Awang East": {
+          punong: "Nimfa Senales",
+          secretary: "Myrna Yabao Myrna",
+          treasurer: "Lucita Tocayon",
+          sk_chair: "Joel Masdo JR",
+          sb_members: [
+            "Monico Pamonical",
+            "Michael Cano",
+            "Francis Nane De Guia",
+            "Fausto Jayme Jr",
+            "Martie Alexis Mendoza",
+            "Julie Molaro Julie",
+            "Orlando Luna",
+          ],
+        },
+        "Awang West": {
+          punong: "Neil Advincula",
+          secretary: "Michael Angelo Romano",
+          treasurer: "Jeffrey Caber",
+          sk_chair: "Sam Ashlee Lao",
+          sb_members: [
+            "Elisa Rosales",
+            "Windyll Keith Mawo",
+            "Mathias Jadaone",
+            "Dharwyn Yu",
+            "Clarence Emberso",
+            "Federico Abajencia JR",
+            "Teresa Lingling",
+          ],
+        },
+        "Ba-ay": {
+          punong: "James Noda",
+          secretary: "Nancy Batchar",
+          treasurer: "Marlie Senolos",
+          sk_chair: "Marwin Artezuela",
+          sb_members: [
+            "Elpedio Mapa",
+            "Gem Militar",
+            "Florabel Matan",
+            "Rubencio Ladag",
+            "Allan Ledesma",
+            "Erna Badillo",
+            "Marianito Senolos Sr.",
+          ],
+        },
+        Bagacay: {
+          punong: "Allan Trani",
+          secretary: "Ma. Emma Baronda",
+          treasurer: "Celia Rubante",
+          sk_chair: "Vince Kenneth Lim",
+          sb_members: [
+            "Lynn Dela Pena",
+            "Rosario Pineda",
+            "Bernardo Bernadit",
+            "Clarita Abadiac",
+            "Erlinda Fortaleza",
+            "Wilfredo Gusabas JR",
+            "Bernardo Cabundoc",
+          ],
+        },
+        "Bagong Lipunan": {
+          punong: "Joel Labasan",
+          secretary: "Violeta De Pablo",
+          treasurer: "Josephine Palioc",
+          sk_chair: "Hernan Fermino",
+          sb_members: [
+            "Rodrigo Eyano",
+            "Leizel Lucion",
+            "Larry Francisco",
+            "Diody Sabilao",
+            "Helen Francisco",
+            "Ricardo Eyano",
+            "Elpedio Dacut Jr",
+          ],
+        },
+        Baja: {
+          punong: "Ma. Janet Aranjuez",
+          secretary: "Cecille Loreto",
+          treasurer: "Mary Jean Cano",
+          sk_chair: "Allan Kalaw JR",
+          sb_members: [
+            "Salvie Orquin",
+            "Ma.Babylyn Senangote",
+            "Rosielita Liray",
+            "Melodia Lebajo",
+            "Jimmy Liray",
+            "Risa Senangote",
+            "Analyn Getigan",
+          ],
+        },
+        Balud: {
+          punong: "Ma Iris Aliman",
+          secretary: "Teresita Valdez",
+          treasurer: "Lizel Claire Advincula",
+          sk_chair: "Alfredo Baculanta JR",
+          sb_members: [
+            "Jerry Domayan",
+            "Augusto Lucero",
+            "Germon Marcial",
+            "Jefferson Edem",
+            "Renato Zosa",
+            "Marvin Chua",
+            "Lorna Gianan",
+          ],
+        },
+        Bante: {
+          punong: "Soledad Rodillas",
+          secretary: "Emelita Sagayap",
+          treasurer: "Norma Amparado",
+          sk_chair: "Jonathan Alabido",
+          sb_members: [
+            "Edilberto Ostulano",
+            "Zosimo Magan",
+            "Ricky Sabar",
+            "Arnel Luaton",
+            "Ofelia Galitan",
+            "Joel Dabalos JR.",
+            "Juanito Labana",
+          ],
+        },
+        Bantian: {
+          punong: "Christine Bangcale",
+          secretary: "Rushel Sabitchana",
+          treasurer: "Nelson Jackson",
+          sk_chair: "Demie Bangcale",
+          sb_members: [
+            "Corazon Obina",
+            "Rolly Boy Taghoy",
+            "Erlinda Taghoy",
+            "Joseph Groyon",
+            "Edwin Ornopia",
+            "Philip Pepito",
+            "Louis Lamor",
+          ],
+        },
+        Basud: {
+          punong: "Evelyn Balatayo",
+          secretary: "Nimfa Se�ora",
+          treasurer: "Aileen Vibas",
+          sk_chair: "Dea Jean Leopardas",
+          sb_members: [
+            "Pepito Balatayo",
+            "Genie Belano",
+            "Gregorio Timan",
+            "Maria Delos Angeles",
+            "Bonifacio Balza",
+            "Cesario Belano",
+            "Rose An Carausos",
+          ],
+        },
+        Bayo: {
+          punong: "Efren Reyes",
+          secretary: "Nelson Gultian",
+          treasurer: "Maila Parido",
+          sk_chair: "Jun Martin Caber",
+          sb_members: [
+            "Alfredo Cangayao Jr.",
+            "Leo Gementiza",
+            "Santos Lagahit",
+            "Gilbert Coyoca",
+            "Roger Conarco",
+            "Ponciano Gultian",
+            "Arnel Caber",
+          ],
+        },
+        Begaho: {
+          punong: "Ranny Corsiga",
+          secretary: "Juvy Fuenteblanca",
+          treasurer: "Myrna Caber",
+          sk_chair: "Vincent Jay Baloca",
+          sb_members: [
+            "Ryan Baloca",
+            "Edwin Marmito",
+            "Willy Salino",
+            "Ramil Peru",
+            "Elisa Gomez",
+            "Reynaldo Monforte",
+            "Aquilino Bongoyan",
+          ],
+        },
+        Binaliw: {
+          punong: "Mercy Andaya",
+          secretary: "Ma.Cristina Locenisio",
+          treasurer: "Ginalyn Caro",
+          sk_chair: "Ivy Mondejar",
+          sb_members: [
+            "Teresa Pampanga",
+            "Nenito Andaya",
+            "Edwin Padua",
+            "Pablo Sale",
+            "Romeo Andaya",
+            "Elma Ignacio",
+          ],
+        },
+        Bontay: {
+          punong: "Ursolina Ostaya",
+          secretary: "Ely Rose Moreno",
+          treasurer: "Ruth Mirales",
+          sk_chair: "Christian Joe Orquin",
+          sb_members: [
+            "Maria Ena Garalza",
+            "Lydia Ostaya",
+            "Willy Caber",
+            "Rosemarie Acedilla",
+            "Marissa Perito",
+            "Perfecta Mompero",
+            "Porferio Garalza JR",
+          ],
+        },
+        Buenavista: {
+          punong: "Christopher Lacon",
+          secretary: "Welfredo Dela Cruz",
+          treasurer: "John Mark Salurio",
+          sk_chair: "Argie De Pablo",
+          sb_members: [
+            "Airen De Pablo",
+            "Mila Taneo",
+            "Mario Saucero",
+            "Antonio Lacon",
+            "Cristine Lacon",
+            "Vicenta Bantasan",
+            "Gino Taneo",
+          ],
+        },
+        Bugtong: {
+          punong: "Cerlito Fortuna JR",
+          secretary: "Renato Melendres",
+          treasurer: "Arnel Escototo",
+          sk_chair: "Maria Cristina Mahinay",
+          sb_members: [
+            "Arnel Almanzor",
+            "Lito Salomon",
+            "John Jeric Pedrosa",
+            "Rosana Francisco",
+            "Melquida Arnejo",
+            "Reynaldo Monares",
+            "Jeffrey Talbo",
+          ],
+        },
+        Cabacungan: {
+          punong: "Engracio Coquilla",
+          secretary: "Flory Moreno",
+          treasurer: "Felisa Maglalang",
+          sk_chair: "Lea Capalis",
+          sb_members: [
+            "Samuel Balbanera",
+            "Marites Natizon",
+            "Cancio Dormiendo Jr.",
+            "Alma Balbanera",
+            "Florencio Singarios",
+            "Monico Mazo",
+            "Belma Julaton",
+          ],
+        },
+        Cabatuan: {
+          punong: "Justo Jaropojop JR",
+          secretary: "Sheryl Lobegas",
+          treasurer: "Julia Mejido",
+          sk_chair: "Kristelle Labrador",
+          sb_members: [
+            "Basilio Bonguit",
+            "Josefina Magan",
+            "Mark Guiller Macabidang",
+            "Randy Rojales",
+            "Sergio Ostulano",
+            "Perlita Leano",
+            "Lolito Mejido",
+          ],
+        },
+        Cabicahan: {
+          punong: "Marion Collado",
+          secretary: "Rosemarie De Vera",
+          treasurer: "Jocelyn Lonzaga",
+          sk_chair: "Lovely Saucero",
+          sb_members: [
+            "Susana Pacoma",
+            "Roberto Parajenog",
+            "Mitchell Miano",
+            "Josefina Cagomoc",
+            "Inocentes Bernales",
+            "Domingo Vista JR",
+            "Aramie Lonzaga",
+          ],
+        },
+        Cabugawan: {
+          punong: "Michael Agura",
+          secretary: "Marilou Ventures",
+          treasurer: "Ma. Leah Salvadora",
+          sk_chair: "Rhea Aniscal",
+          sb_members: [
+            "Jessica Ortiz",
+            "Ma. Kris Naciongayo",
+            "Helen Aniscal",
+            "Rolando Avila",
+            "Ma. Karen Manlangit",
+            "Jose Mag-Ampo",
+            "Ma. Gina Bosque",
+          ],
+        },
+        Cacaransan: {
+          punong: "Ma Vilma Gruta",
+          secretary: "Ma. Theresa Manicane",
+          treasurer: "Rosalie Faustino",
+          sk_chair: "Justin Lauderes",
+          sb_members: [
+            "Jesus Lauderes",
+            "Esperanza Sabordo",
+            "Jocelyn Sorilo",
+            "Gerryson Dealagdon",
+            "Rosalie Montejo",
+            "Maria Carig",
+            "Marlyn Monta�o",
+          ],
+        },
+        "Cag-anahaw": {
+          punong: "Rebecca Septo",
+          secretary: "Mary Grace Bonayog",
+          treasurer: "Dailyn Delos Reyes",
+          sk_chair: "Diasten Delos Reyes",
+          sb_members: [
+            "Gaudioso Catonjay",
+            "Jocelyn Delos Reyes",
+            "Ec Lojero",
+            "Evangeline Francisco",
+            "Beatriz Caya",
+            "Elpedio Cadajas JR",
+            "Marylyn Delos Reyes",
+          ],
+        },
+        "Cag-anibong": {
+          punong: "Nestor Malwinda",
+          secretary: "Conchita Monares",
+          treasurer: "Teresa Tarrayo",
+          sk_chair: "Elmer Pentuan",
+          sb_members: [
+            "Jonas Tarrayo",
+            "Ruel Romangaya",
+            "Noel Lea�o",
+            "Marieta Bantasan",
+            "Elena Domanog",
+            "Leopaldo Baragenio",
+            "Cristita Bantasan",
+          ],
+        },
+        "Cag-olango": {
+          punong: "Nelson Paulino",
+          secretary: "May Ann Senolos",
+          treasurer: "Avelino Garciso",
+          sk_chair: "Xanthies Tidoso",
+          sb_members: [
+            "Ruth Albay",
+            "Feliciano Maribojoc Jr",
+            "Julito Solibaga",
+            "Adriano Senolos",
+            "Paulino Baliber",
+            "Roy Paulino",
+            "Sandrina Bacunawa",
+          ],
+        },
+        Cagbanayacao: {
+          punong: "Gerardo Dealagdon",
+          secretary: "Ryan Galabay",
+          treasurer: "Ella Mae Velasco",
+          sk_chair: "Jennifer Dealagdon",
+          sb_members: [
+            "Nenita Ortiz",
+            "Eliseo Casaljay",
+            "Ramon Casaljay",
+            "Romeo Derio",
+            "Fernando Correche",
+            "Erwin Ortiz",
+            "Gerardo Casaljay",
+          ],
+        },
+        Cagbayang: {
+          punong: "Claudio Valenciano",
+          secretary: "Jose Ponpon",
+          treasurer: "Renato Calipes",
+          sk_chair: "Shirly Samonte",
+          sb_members: [
+            "Gina Raceles",
+            "Ma Jamela Rada",
+            "Ramon Asis SR",
+            "Darwin Rada",
+            "Crispen Araiz JR",
+            "Sandra Samonte",
+            "Jocelyn Espina",
+          ],
+        },
+        Cagbilwang: {
+          punong: "Nila Floro",
+          secretary: "Dalisay Titoy",
+          treasurer: "Leslie Montialto",
+          sk_chair: "Shiela Mae Aniscal",
+          sb_members: [
+            "Alfredo Diaz",
+            "Dolores Cayunda",
+            "Maria Teresa Baldomaro",
+            "Benjamin Mayran",
+            "Jaime Diaz",
+            "Romeo Aranjuez",
+            "Marvin Maravilla",
+          ],
+        },
+        Cagboborac: {
+          punong: "Josephine Abajencia",
+          secretary: "Rey Nicor",
+          treasurer: "Jessa Velasco",
+          sk_chair: "Marian Rodrigo",
+          sb_members: [
+            "Salvacion Balbarona",
+            "Oscar Balbarona",
+            "Mario Abajencia",
+            "Cristita Bagaris",
+            "April Jhon Balbarona",
+            "Efren Abajencia",
+            "Virginia Decamon",
+          ],
+        },
+        "Caglanipao Sur": {
+          punong: "Magno Prudenciado",
+          secretary: "Irene Ibajo",
+          treasurer: "Jenalyn Tapaya",
+          sk_chair: "Romel Mekitpekit",
+          sb_members: [
+            "Diolita Rollo",
+            "Genalyn Gallo",
+            "Eva Prudenciado",
+            "Bernard Peraan",
+            "Julius Lingling",
+            "Randy Nabor",
+            "Rosita Balili",
+          ],
+        },
+        "Cagmanipis Norte": {
+          punong: "Jessie Septimo",
+          secretary: "Elesio Longcanaya",
+          treasurer: "Lecilda Aquino",
+          sk_chair: "Richdorf Caspe",
+          sb_members: [
+            "Ritchie Ignacio",
+            "Alden Septimo",
+            "Domingo Dura",
+            "Deodelita Dura",
+            "Renato Moraca",
+            "Zenaida Villanueva",
+            "Josefina Magsalang",
+          ],
+        },
+        "Cagmanipis Sur": {
+          punong: "Renante Dura",
+          secretary: "Rosanna Rosel",
+          treasurer: "Joan Rosalado",
+          sk_chair: "Claude Sydney Nunez",
+          sb_members: [
+            "Fernando Olasiman JR",
+            "Leonida Moraca",
+            "Alejandro Flor",
+            "Maricel Cantiga",
+            "Elsa Ronda",
+            "Arvin Villanueva",
+            "Analyn Calamdag",
+          ],
+        },
+        Cagnipa: {
+          punong: "Lucia Lamorin",
+          secretary: "Janice Paulino",
+          treasurer: "Editha Suarez",
+          sk_chair: "Archelle Sano",
+          sb_members: [
+            "Joel Francisco",
+            "Gabriel Ticay",
+            "William Delmonte",
+            "Cesario Espinosa",
+            "Basilio Francisco",
+            "Leonila Caridad",
+            "Lita Paulino",
+          ],
+        },
+        Cagsalaosao: {
+          punong: "Nena Villamor",
+          secretary: "Mercedes Robiso",
+          treasurer: "Victoria Osabel",
+          sk_chair: "Vincent Ramos",
+          sb_members: [
+            "Jeranie Agura",
+            "Tirso Coquilla",
+            "Shaina Puralan",
+            "Emelia Lasaca",
+            "Danilo Agura",
+            "Junie Labonite",
+            "Nimfa Gonzales",
+          ],
+        },
+        Cahumpan: {
+          punong: "Rolando Diolon JR",
+          secretary: "Sherlie Durado",
+          treasurer: "Rosalie Comonical",
+          sk_chair: "Zairena Jane Refamonte",
+          sb_members: [
+            "Honorato Gullas JR.",
+            "Marjorie Las-Ay",
+            "Selasio Diolon",
+            "Raul Diomangay",
+            "Michael Bagasbas",
+            "Pablito Diolon JR.",
+            "Marlyn Comonical",
+          ],
+        },
+        Calocnayan: {
+          punong: "Maricel Diaz",
+          secretary: "Elena Verano",
+          treasurer: "Cristina Nebril",
+          sk_chair: "Melanie De Pedro",
+          sb_members: [
+            "Gloria Verano",
+            "Edna De Guzman",
+            "Denes Mateo",
+            "Rowena Alegria",
+            "Ramil Casaljay",
+            "Eddie Dionog",
+          ],
+        },
+        Cangomaod: {
+          punong: "Alberto Doquidoc JR",
+          secretary: "Vilma Osted",
+          treasurer: "Wowie Delabajan",
+          sk_chair: "Maristel Abelong",
+          sb_members: [
+            "Arnel Doquidoc",
+            "Arlens Alburan",
+            "Gelly Espinosa",
+            "Rolando Paulino",
+            "Estelito Estrella",
+            "Renante Moraca",
+            "Ramil Mapa",
+          ],
+        },
+        Canhumadac: {
+          punong: "Nida Fuenteblanca",
+          secretary: "Jenet Delarmino",
+          treasurer: "Analyn Cachero",
+          sk_chair: "Ana Mae Fuenteblanca",
+          sb_members: [
+            "Lea Eugenio",
+            "Micheal Bernie Lontao",
+            "Edna Fuenteblanca",
+            "Dionesio Abria",
+            "Jolina Dealagdon",
+            "Berlito Caratay",
+            "Estelita Miano",
+          ],
+        },
+        Capacuhan: {
+          punong: "Leo Mag-Ampo",
+          secretary: "Maria Mae Cuizon",
+          treasurer: "Ma. Rosa Branzuela",
+          sk_chair: "Ma. Elena Cuizon",
+          sb_members: [
+            "Analyn Andrade",
+            "Thelma Fuentes",
+            "Nomie Pentason",
+            "Silverio Mag-Ampo",
+            "Vebiana Capales",
+            "Edna Cuizon",
+            "Rocel Cuizon",
+          ],
+        },
+        Capoocan: {
+          punong: "Matias Lepata",
+          secretary: "Patrick Darwin Noda",
+          treasurer: "Teresita De Leon",
+          sk_chair: "Pamela Mae Candido",
+          sb_members: [
+            "Jonas Portugaliza",
+            "Melvin Lepata",
+            "Dionesio De Guzman",
+            "Ernesto Tonog JR",
+            "Judy Boy Bescoro",
+            "Virgil Caliste",
+            "Joel Beracis",
+          ],
+        },
+        Carayman: {
+          punong: "Nestor Belleza",
+          secretary: "Lodelia Avinon",
+          treasurer: "Ana Lozano",
+          sk_chair: "Angel Francys Aballe",
+          sb_members: [
+            "Reynaldo Nobiar",
+            "Anastaccio Bernadit",
+            "Sheila May Lolo",
+            "Benido Domayan",
+            "Danilo Tarrayo",
+            "Lydia Ladag",
+            "Rosa Bola",
+          ],
+        },
+        Carmen: {
+          punong: "Jose Jaropojop JR",
+          secretary: "Leah Legatuna",
+          treasurer: "Ana Labial MA.",
+          sk_chair: "Gerick Ortega",
+          sb_members: [
+            "Angelo Rebucas",
+            "Jose Divino So",
+            "Jerome Tarrayo",
+            "Rowena Disbarro",
+            "Ricky Francisco",
+            "Elizalde Daguman",
+            "Claudius Juan Daguman",
+          ],
+        },
+        Catabunan: {
+          punong: "Randy Flores",
+          secretary: "Marites Branzuella",
+          treasurer: "Minerva Estrellanes",
+          sk_chair: "Shienna Joy Orquin",
+          sb_members: [
+            "Jocelyn Branzuela",
+            "Justin Lucis",
+            "Rosita Debuton",
+            "Kris Branzuela",
+            "Rosita Noynay",
+            "Jessica Servo",
+            "Gena Miano",
+          ],
+        },
+        Caybago: {
+          punong: "Laurence Jumaday",
+          secretary: "Jenifer Julaton",
+          treasurer: "Rebecca Durmiendo",
+          sk_chair: "Ryza Durmiendo",
+          sb_members: [
+            "Enrique Villarin Jr.",
+            "Philip Ducay",
+            "Dennis Durmiendo",
+            "Milagros Ba�acia",
+            "Ledwina Mahinay",
+            "Reynaldo Datiles",
+            "Pedieto Baron",
+          ],
+        },
+        Central: {
+          punong: "Mary Grace Bracamonte",
+          secretary: "Joan Dela Pe�a",
+          treasurer: "Norhata Acoon",
+          sk_chair: "Ramon Angelo Makabenta",
+          sb_members: [
+            "Evangelyn Panoy",
+            "Lucia Nacinopa",
+            "Renato So",
+            "Joseph Caruyan",
+            "Quent Queroljico",
+            "Ma Cindy Mancol",
+            "Ricardo Lao JR",
+          ],
+        },
+        Cogon: {
+          punong: "Norilie Admirable",
+          secretary: "Cristina Darras",
+          treasurer: "Mary Grace Dealagdon",
+          sk_chair: "Dona Navilon",
+          sb_members: [
+            "Renante Magbutay",
+            "Ma. Rowena Dela Paz",
+            "Melanie Real",
+            "Teresita Gososo",
+            "Marlon Admirable",
+            "Ma. Richelle Mancol",
+            "Herminigilda Soliva",
+          ],
+        },
+        Dagum: {
+          punong: "Kristopher Krishnamuti",
+          secretary: "Myra Dolenzo",
+          treasurer: "Ma. Elsa Oliva",
+          sk_chair: "Hailey Anne Miano",
+          sb_members: [
+            "Romeo Lauderes",
+            "Susana Picarol",
+            "Andres Barandino JR",
+            "Manuel Abayon JR",
+            "Elma Pampanga",
+            "Rogelio Redima",
+          ],
+        },
+        "Danao I": {
+          punong: "Antonio Sapinit",
+          secretary: "Roberto Castillo JR",
+          treasurer: "Evelyn Ongcal *",
+          sk_chair: "Christian Ongcal",
+          sb_members: [
+            "Romeo Montecillo",
+            "Albino Lucis",
+            "Vevencio Marquez",
+            "Joel Magan",
+            "Robert Bantad",
+            "Venancio Guyo",
+            "Mario Magan",
+          ],
+        },
+        "Danao II": {
+          punong: "Ernesto Sarco",
+          secretary: "Pamilla Senolos",
+          treasurer: "Patricia Francisco",
+          sk_chair: "Hanna Mae Moraca",
+          sb_members: [
+            "Enrique Suarez",
+            "Eduardo Biasong",
+            "Alejandro Biasong",
+            "Dioscoro Senolos",
+            "Pedro Adan",
+            "Marianita Tamidles",
+            "Elizabeth Duro",
+          ],
+        },
+        Dawo: {
+          punong: "Ma. Cristina Tamoyang",
+          secretary: "Mary Ann Tarrayo",
+          treasurer: "Riza Normor",
+          sk_chair: "Arvin Viscara",
+          sb_members: [
+            "Ma. Lynlyn Somodoy",
+            "Dindo Viscara",
+            "Jose Erwin Termo",
+            "Santos Viscara",
+            "Eduardo Bantasan",
+            "Cecilio Cabintoy",
+            "Rey Villanueva",
+          ],
+        },
+        "De Victoria": {
+          punong: "Ma. Jeanette Diomangay",
+          secretary: "Benjamin Sobia JR",
+          treasurer: "Richard Doinog",
+          sk_chair: "Arwen Sayawan",
+          sb_members: [
+            "Michelle Saucero",
+            "Chelito Roaya",
+            "Marlon James Burca Sr",
+            "Jojo Palioc",
+            "Elma Abad",
+            "Antonio Doinog",
+            "Flordeliza Abad",
+          ],
+        },
+        Dinabongan: {
+          punong: "Danilo Yabao SR",
+          secretary: "Ricky Degui�o",
+          treasurer: "Ruth Montallon",
+          sk_chair: "Joshua Aniban",
+          sb_members: [
+            "Don Jovan Felices",
+            "Carlo Flor",
+            "Mark Anthony Llabado",
+            "Marites Labonite",
+            "Joel Araza",
+            "Charina Gabing",
+            "Nito Aniban Sr.",
+          ],
+        },
+        Dinagan: {
+          punong: "Josefina Monforte",
+          secretary: "Myrna Jumagdao",
+          treasurer: "Dennis Disbarro",
+          sk_chair: "Regine Cano",
+          sb_members: [
+            "Susana Dimaayo",
+            "Leo Abarico",
+            "Argie Abarico",
+            "Magin Reformina",
+            "Nicy Layong",
+            "Guillermo Monforte",
+            "Mailyn Alvarez",
+          ],
+        },
+        Dinawacan: {
+          punong: "Lope Onate",
+          secretary: "Reste Delmonte",
+          treasurer: "Jona Lea�o",
+          sk_chair: "Reshiela O�ate",
+          sb_members: [
+            "Elsa Eyano",
+            "De Pablo Francisco",
+            "Nimfa O�ate",
+            "Cristina Wahingon",
+            "Ronnel O�ate",
+            "Paster Francisco",
+            "Veloso Belino",
+          ],
+        },
+        Esperanza: {
+          punong: "Myra Alegria",
+          secretary: "Maricel Galit",
+          treasurer: "Judy Ann Siervo",
+          sk_chair: "Erma O�ate",
+          sb_members: [
+            "Sandra Jaropojop",
+            "Sonny Macabidang",
+            "Delia Deguino",
+            "Minda Rosino",
+            "Losanto Degui�o JR",
+            "Join Maino",
+            "Marites Balantino",
+          ],
+        },
+        Gabay: {
+          punong: "Gregorio Espedilla JR",
+          secretary: "Jesica Lungsod",
+          treasurer: "Roger Parido",
+          sk_chair: "John Paul Lauderes",
+          sb_members: [
+            "Kristine Pelenio",
+            "Marian Nayanga",
+            "Ernesto Lentejas",
+            "Merlyn Lagarde",
+            "Rolando Somindo",
+            "Ricardo Lentejas",
+            "Ponciano Tarrayo",
+          ],
+        },
+        Gadgaran: {
+          punong: "Gerardo Salda�a",
+          secretary: "Ismael Magistrado",
+          treasurer: "Emelita Cabije",
+          sk_chair: "Rolando Grotes",
+          sb_members: [
+            "Pedmenio Layam Jr",
+            "Glenn Salda�a",
+            "Rafael Jadulco",
+            "Rolando Grotes",
+            "Rodolfo Lamparas",
+            "Romil Arvin Obong",
+            "Editha Rosales",
+          ],
+        },
+        Gasdo: {
+          punong: "Jeprie Valdez",
+          secretary: "Emmar Marino",
+          treasurer: "Mariz Espelembergo",
+          sk_chair: "Josua Valdez",
+          sb_members: [
+            "Edna Cluma",
+            "Bernardo Taneo",
+            "Joan Espelembergo",
+            "Roque Cajusay",
+            "Zenaida Marino",
+            "Danilo Francisco",
+            "Percy Espelembergo",
+          ],
+        },
+        Geragaan: {
+          punong: "Emilio Dublin",
+          secretary: "Ma. Erma Lungsod",
+          treasurer: "Yanzon Romert",
+          sk_chair: "Mark Doinog",
+          sb_members: [
+            "Ruben Gacelos",
+            "Jackylyn Doinog",
+            "Rogelio Monsanto",
+            "Edgar Ogabar",
+            "Salvadora Pransal",
+            "Editha Arpon",
+            "Roger Comillo",
+          ],
+        },
+        "Guin-on": {
+          punong: "Benjamin Jaropojop",
+          secretary: "Crisanta Merilles",
+          treasurer: "Gilda Loyola",
+          sk_chair: "Rojan Virgo",
+          sb_members: [
+            "Ruel Eya",
+            "Carina Jaropojop",
+            "Martinito Malabarbas",
+            "Sabas Adidas",
+            "Lian Diosa",
+            "Isagane Canete",
+            "Myrlin Monsanto",
+          ],
+        },
+        "Guinbaoyan Norte": {
+          punong: "Melanio Olela",
+          secretary: "Ruben Coles",
+          treasurer: "Grace Nueva",
+          sk_chair: "Jerald Jalayajay",
+          sb_members: [
+            "Alicia Garalza",
+            "Erna Versoza",
+            "Jerome Sebello",
+            "Teresita Salvador",
+            "Victorio Oro",
+            "Virgie Domayan",
+            "Ma. Fe Salvame",
+          ],
+        },
+        "Guinbaoyan Sur": {
+          punong: "Rogelio Canaman JR",
+          secretary: "Emily Macasalabang",
+          treasurer: "Rosavilla Calagos",
+          sk_chair: "Cristy Cajurao",
+          sb_members: [
+            "Reynaldo Calong",
+            "Urbano Doinog",
+            "Narciso Agte",
+            "Simeon Tarrayo",
+            "Cristina Rollo",
+            "Jhason Calagos",
+            "Gloria Ramonida",
+          ],
+        },
+        Hamorawon: {
+          punong: "Jesus Camarines JR",
+          secretary: "Bonifacio Sabile",
+          treasurer: "Fernando Correche",
+          sk_chair: "Marvin Sales",
+          sb_members: [
+            "Jao Calamayo",
+            "Josr Monteron",
+            "Jonas Donceras",
+            "Felisq Dealagdon",
+            "Roberto Cajurao",
+            "Jessica Cajurao",
+            "Purita Ejoc",
+          ],
+        },
+        Helino: {
+          punong: "Bernabe Eyano",
+          secretary: "Wilfredo Francisco",
+          treasurer: "Gilda Degui�",
+          sk_chair: "Nika O�ate",
+          sb_members: [
+            "Jovina Dealagdon",
+            "Anatolio Saucero",
+            "Arman O�ate",
+            "Edgardo Cabudsan",
+            "Liberato Salonoy",
+            "Amalia Diaz",
+            "Nenita Santiago",
+          ],
+        },
+        Hibabngan: {
+          punong: "Abner Deliquina",
+          secretary: "Cecil Delequi�a",
+          treasurer: "Aida De Gracia",
+          sk_chair: "Remar Delequi�a",
+          sb_members: [
+            "Joseph De Gracia",
+            "Judith Baldomaro",
+            "Jimmy Mondejar",
+            "Joel Delequi�a",
+            "Vivencia Delequi�a",
+            "Renato Panzuelo",
+            "Solpiano Erella",
+          ],
+        },
+        Hibatang: {
+          punong: "Gerardo Francisco",
+          secretary: "Alma Francisco",
+          treasurer: "Jennifer Tomnob",
+          sk_chair: "Janice Palioc",
+          sb_members: [
+            "Eduardo Laoyon",
+            "Sany Boy Somino",
+            "Jovito Jalayajay",
+            "Jessie Francisco",
+            "Charina Somino",
+            "Julito Sayawan",
+            "Editha Somino",
+          ],
+        },
+        Higasaan: {
+          punong: "Charita Cajusay",
+          secretary: "Chainel Mateo",
+          treasurer: "Jocelyn Cajusay",
+          sk_chair: "Lesly An Bantilo",
+          sb_members: [
+            "Maribel Sorio",
+            "Laina Ro�o",
+            "Susan De Pedro",
+            "Nely Jicento",
+            "Susan Cajusay",
+            "Janeth Cajusay",
+            "Norcy Mateo",
+          ],
+        },
+        Himalandrog: {
+          punong: "Perpo Deborbon",
+          secretary: "Virginia Valentino",
+          treasurer: "Chasty Mateo",
+          sk_chair: "Vilma Valentino",
+          sb_members: [
+            "Jeramy Sameniano",
+            "Nelboy Legason",
+            "Sherlina Serrano",
+            "Sherly O�ate",
+            "Florencio Mangalito",
+            "Corita Valentino",
+            "Nora Valentino",
+          ],
+        },
+        "Hugon Rosales": {
+          punong: "Micheal Trenio",
+          secretary: "Arnulfo Carpio",
+          treasurer: "Rizza Quiambao",
+          sk_chair: "Jamaica Juanerio",
+          sb_members: [
+            "Urbano Juanerio",
+            "Conrado Macabidang",
+            "Marissa Sayawan",
+            "Eva Gutierrez",
+            "Rodeo Quiambao",
+            "Susan Carpio",
+            "Robert Gutierrez",
+          ],
+        },
+        Jacinto: {
+          punong: "Jaime Abria Jr.",
+          secretary: "Sharina Ensly",
+          treasurer: "Virginia Francisco",
+          sk_chair: "Ivan Abria Jr.",
+          sb_members: [
+            "Patrick Bulfango",
+            "Jayson Pajardo",
+            "Pablo Sister",
+            "Jerry Abria",
+            "Edmundo Perito",
+            "Vic Francisco",
+            "Anacoreto Bello",
+          ],
+        },
+        Jimautan: {
+          punong: "Susana Villas",
+          secretary: "Mylene Monsanto",
+          treasurer: "Myrna Guande",
+          sk_chair: "Jerick Villanueva",
+          sb_members: [
+            "Jeffrey Miano",
+            "Harold Tarrayo",
+            "Oscar Pransal",
+            "Reynaldo Meli",
+            "Fernando Medura",
+            "Conrado Calderon",
+            "Ricardo Beri",
+          ],
+        },
+        "Jose A. Ro�o": {
+          punong: "Rico Rojo",
+          secretary: "Dante Severo",
+          treasurer: "Milagros Poblar",
+          sk_chair: "Ian Sagadal",
+          sb_members: [
+            "Mary Ann Depanzo",
+            "Rocque Panzuelo",
+            "Annabelle Ramirez",
+            "Alfredo Busante",
+            "Alfredo Bernales",
+            "Nena Delgado",
+            "Rodrigo Luchavez",
+          ],
+        },
+        Kalilihan: {
+          punong: "Raul Fajardo",
+          secretary: "Elma Cahusay",
+          treasurer: "Alicia Dealagdon",
+          sk_chair: "Anthony Cajusay",
+          sb_members: [
+            "Nezarino Sorio",
+            "Ramil Sorio",
+            "Jocelyn Diaz",
+            "Gina Abria",
+            "Elvie Fajardo",
+            "Evangeline Sorio",
+            "Ruel Sorio",
+          ],
+        },
+        Kilikili: {
+          punong: "Danilo Rojas",
+          secretary: "Isabel Casa�a",
+          treasurer: "Irene Balane",
+          sk_chair: "A Ngelito Mirales",
+          sb_members: [
+            "Teo Ann Aniana",
+            "Tito Ponsica SR",
+            "Elizabeth Casa�a",
+            "Daniel Casa�a",
+            "Ma. Karen Ocay",
+            "Benjamin Batican JR",
+            "Banny Sale",
+          ],
+        },
+        "La Paz": {
+          punong: "Francisca Cajuban",
+          secretary: "Erica Gallardo",
+          treasurer: "Cristita Ansus",
+          sk_chair: "Van Rick Dacut",
+          sb_members: [
+            "Calbayog City Regulacion",
+            "Eva Disbarro",
+            "Claribel Alegria",
+            "Susana Judillla",
+            "Nelson Judilla",
+            "Ma. Vilma Dealagdon",
+            "Zenaida Judilla",
+          ],
+        },
+        Langoyon: {
+          punong: "Luningning Derio",
+          secretary: "Jonel Jalayajay",
+          treasurer: "Lilia Bello",
+          sk_chair: "Jerson Beleno",
+          sb_members: [
+            "Antoun Tenorio",
+            "Jessica Derio",
+            "Thelma Casaljay",
+            "Silvano Lacandazo",
+            "Vilma Derio",
+            "Emily Yrigon",
+          ],
+        },
+        Lapaan: {
+          punong: "Felix Andrade",
+          secretary: "Jerica Panzuelo",
+          treasurer: "Roy Alivario",
+          sk_chair: "Clint Joshua Saucero",
+          sb_members: [
+            "Allan Pedragorda",
+            "Alfredo Dosado Jr",
+            "Edgar Francisco",
+            "Anthony Buque",
+            "Olimpio Delequi�a",
+            "Rosalyn Saucero",
+            "Jose Deliqui�a",
+          ],
+        },
+        Libertad: {
+          punong: "Virginia Garganera",
+          secretary: "Michael Novela",
+          treasurer: "Melissa Ygrubay",
+          sk_chair: "Dorissa Novela",
+          sb_members: [
+            "Mary Jane Diomangay",
+            "Rodolfo Dawisan",
+            "Agrifino Garganera Jr",
+            "Lorna Dealagdon",
+            "Letecua Gabing",
+            "Bernardo Monsanto",
+            "Marlyn Bustamante",
+          ],
+        },
+        Limarayon: {
+          punong: "Joel Manuales",
+          secretary: "Edelyn Reyes",
+          treasurer: "Mark Paul Beso",
+          sk_chair: "Ronel Osabel",
+          sb_members: [
+            "Ma Helen Javines",
+            "Jocelyn Leopardas",
+            "Alma Barandino",
+            "Julito Abad",
+            "Igmedio Aniban",
+            "Jimuel Genotiva",
+            "Remedios Manuales",
+          ],
+        },
+        Longsob: {
+          punong: "Resty Edraga",
+          secretary: "Ma.Fe Lebajo",
+          treasurer: "Joylyn Peru",
+          sk_chair: "Jaylord Sarmiento",
+          sb_members: [
+            "Rico Balan",
+            "Marvin Edragga",
+            "Ruel Nayangga",
+            "Eloisa Alejandro",
+            "Joel Manlangit",
+            "Ricardo Bediarico",
+            "Geraldine Titoy",
+          ],
+        },
+        Lonoy: {
+          punong: "Danilo Macapanas",
+          secretary: "Marisa Aclado",
+          treasurer: "Jonillyn Monzaga",
+          sk_chair: "Rodney Marquez",
+          sb_members: [
+            "Raul Decatoria",
+            "Rodolfo Marquez",
+            "Ma. Linda Mecano",
+            "Serafin Lavendia Jr.",
+            "Briel Bagares",
+            "Bonifacio Semillano",
+            "Riza Ricalde",
+          ],
+        },
+        Looc: {
+          punong: "Paz Lauderes",
+          secretary: "Ledesia Regayas",
+          treasurer: "Ma. Genda Reoyan",
+          sk_chair: "Jela Beconado",
+          sb_members: [
+            "Maria Carig",
+            "Tonton Monteron",
+            "Pedrito Lauderes",
+            "Nestor Barbarona",
+            "Rowena Mendoza",
+            "Rocky Boy Gonzaga",
+            "Ramon Tomboc",
+          ],
+        },
+        "Mabini I": {
+          punong: "Jonathan Catalogo",
+          secretary: "Richelle Verano",
+          treasurer: "Elma Balantino",
+          sk_chair: "Remel Verano",
+          sb_members: [
+            "Osita Verano",
+            "Merlyn Verano",
+            "Bedio Jornex",
+            "Junjun Ornalea",
+            "John Paul Verano",
+            "Adelfa Verano",
+            "Jenilyn Arandia",
+          ],
+        },
+        "Mabini II": {
+          punong: "Esteban Matchubar",
+          secretary: "Liezl Ruano",
+          treasurer: "Domingo Lao",
+          sk_chair: "Cj Ruano",
+          sb_members: [
+            "Ma. Diana Pate�o",
+            "Alberto Guarino Jr",
+            "Mariano Ruano",
+            "Necita Balero",
+            "Alejo Pate�o",
+            "Julieto Lotado",
+            "Cecilia Leopardas",
+          ],
+        },
+        Macatingog: {
+          punong: "Edgardo Lagrimas",
+          secretary: "Elisa Loberiano",
+          treasurer: "Cynthia Dulloso",
+          sk_chair: "Juliet Loberiano",
+          sb_members: [
+            "Belita Macabidang",
+            "Marites Pabia",
+            "Marvin Loberiano",
+            "Leo Loberiano",
+            "Jimmy Termo",
+            "Vevencia Flogen",
+            "Joel Sevillano",
+          ],
+        },
+        "Mag-ubay": {
+          punong: "Jessica Yu",
+          secretary: "Joan Villas",
+          treasurer: "Aileen Flor",
+          sk_chair: "Rhae Debangco",
+          sb_members: [
+            "Emilio Bescoro",
+            "Wilfredo Yu",
+            "Erlinda Romano",
+            "Honorio Clemens JR",
+            "Miramar Jaropojop",
+            "Ma. Nora Matan",
+            "Felizardo Gabing",
+          ],
+        },
+        Malaga: {
+          punong: "Eugene Munez",
+          secretary: "Adela Flor",
+          treasurer: "Jarry Macabenta",
+          sk_chair: "Charmela Mu�ez",
+          sb_members: [
+            "Josefa Balolot",
+            "Ruben Calimbo",
+            "Emelita Diolon",
+            "Rosalinda Albino",
+            "Alden Cantiga",
+            "Micol Ygbuhay",
+            "Dioscoro Ayohan Jr",
+          ],
+        },
+        Malajog: {
+          punong: "Renilda Sagala",
+          secretary: "Ma. Charina Boroc",
+          treasurer: "Eddie Layong",
+          sk_chair: "Kent David Ong",
+          sb_members: [
+            "Emerlito Sintos",
+            "Rogelio Luda",
+            "Rita Dabalos",
+            "Noemie Relao",
+            "Evangeline Araza",
+            "Monina Pacsa",
+          ],
+        },
+        Malayog: {
+          punong: "Salvador Planque",
+          secretary: "Shirley Malinao",
+          treasurer: "Loid Dalupan",
+          sk_chair: "Jadelyn Cuizon",
+          sb_members: [
+            "Virginita Danico",
+            "Frelina Colo",
+            "Jobilo Ariban",
+            "Romeo Mahinay",
+            "Marieta Dela Rosa",
+            "Bamerador Moraca",
+            "Lucresio Esturom JR",
+          ],
+        },
+        Malopalo: {
+          punong: "Oscar Estoya",
+          secretary: "Rowena Caliste",
+          treasurer: "Mary Jane Dordines",
+          sk_chair: "Mark John Estoya",
+          sb_members: [
+            "Mario Caliste",
+            "William Conzon",
+            "Renato Magan",
+            "Renato Estoya",
+            "Roberto Morate jr",
+            "Aljon Roxas",
+            "Charlie Solana",
+          ],
+        },
+        Mancol: {
+          punong: "Charllie Lanchenebre",
+          secretary: "Marlo Taneo",
+          treasurer: "Rodel Macabenta",
+          sk_chair: "Jocelyn Depedro",
+          sb_members: [
+            "Bobby Omayon",
+            "Deorico Lacon",
+            "Reynaldo Lacon",
+            "Joey Jalayahay",
+            "Johny Lacon",
+            "Alma Taneo",
+            "Danilo Lacon",
+          ],
+        },
+        "Manguino-o": {
+          punong: "Eric Nunez",
+          secretary: "Ryelinda Magan",
+          treasurer: "Elmer Pajarito",
+          sk_chair: "Angelica Ongcal",
+          sb_members: [
+            "Renato Magan",
+            "Federico Balios",
+            "Arnel Pajarito",
+            "Darwin Marcos",
+            "Thelma Lacbayo",
+            "Virna Marahay",
+            "Cornelio Lacbayo",
+          ],
+        },
+        Mantaong: {
+          punong: "Jovito Rojales",
+          secretary: "Mary Ann Villamor",
+          treasurer: "Jimmy Rojales",
+          sk_chair: "Kurt Juanerio",
+          sb_members: [
+            "Richard Salem",
+            "Loreto Rojales",
+            "Virginia Garalza",
+            "Lucy Juanerio",
+            "Anabelle Rojales",
+            "Silvan Fuenteblanca",
+          ],
+        },
+        "Manuel Barral Sr.": {
+          punong: "Rebecca Hatakenaka",
+          secretary: "Teresa Burca",
+          treasurer: "Maria Tarrayo",
+          sk_chair: "Mark Benedic Casio",
+          sb_members: [
+            "Emily Cruda",
+            "Elizabeth Julaton",
+            "Evangeline Cadiong",
+            "Noel Normor",
+            "Monching Brillantes",
+          ],
+        },
+        Marcatubig: {
+          punong: "Julito Basbas",
+          secretary: "Dominic Onato",
+          treasurer: "Loida Probadora",
+          sk_chair: "Mark James Basbas",
+          sb_members: [
+            "Francisco Branzuela",
+            "Angela Cadampog",
+            "Ma. Maricel Plecerda",
+            "Marie Montino",
+            "Jemar Marquez",
+            "Zenaida Andaya",
+            "Thelma Almoradie",
+          ],
+        },
+        Matobato: {
+          punong: "Eric Escobar",
+          secretary: "Evodio Ygbuhay",
+          treasurer: "Mark Dhen Sarmiento",
+          sk_chair: "Melody Mendoza",
+          sb_members: [
+            "Ni�o Aquino",
+            "Rosanna Gonzaga",
+            "Ramil Aliman",
+            "Adela Cuanico",
+            "Allan Mendoza",
+            "Ryan Reyes",
+            "Daisy Sebello",
+          ],
+        },
+        Mawacat: {
+          punong: "Roberto Sumbise",
+          secretary: "Dionesia Mayran",
+          treasurer: "Dina Judloman",
+          sk_chair: "Rico Acodesin",
+          sb_members: [
+            "Aleli Sumbise",
+            "Bernard Mallari Jr.",
+            "Robenson Sagayap",
+            "Razel Barro",
+            "Eufracio Mayran",
+            "Ronald Bragais",
+            "Eduardo Encarnacion",
+          ],
+        },
+        Maybog: {
+          punong: "Artemio Ramonida Jr.",
+          secretary: "Shella Bantasan",
+          treasurer: "Nora Gepiga",
+          sk_chair: "Egie Almoquerra",
+          sb_members: [
+            "Carlos Bardaje",
+            "Fernando Fortuna",
+            "Maricel Jumaday",
+            "Nimfa Tomnob",
+            "Artemio Ramonida",
+            "Alfredo Parido",
+            "Marcelina Lagarde",
+          ],
+        },
+        Maysalong: {
+          punong: "Lina Capeding",
+          secretary: "Anabelle Canaman",
+          treasurer: "Flora Llever",
+          sk_chair: "Grace Llever",
+          sb_members: [
+            "Rafael Colinares",
+            "Julito Estrada",
+            "Edward Kent Llever",
+            "Richard Dealagdon",
+            "Jennylyn Capeding",
+            "Erlinda Nayanga",
+            "Geramie Bulawan",
+          ],
+        },
+        Migara: {
+          punong: "Jerry Doinog",
+          secretary: "Maria Doinog",
+          treasurer: "Vilma Suad",
+          sk_chair: "Ian Pagatpat",
+          sb_members: [
+            "Baltazar Diongzon",
+            "Renante Talay",
+            "Eduardo Sofronio",
+            "Edgar Doinog JR",
+            "Rosalinda Mersado",
+            "William Laoyon",
+          ],
+        },
+        Nabang: {
+          punong: "Rolando Peru",
+          secretary: "Maria Jennifer Lapara",
+          treasurer: "Alfredo Perito",
+          sk_chair: "April Mae Casin0",
+          sb_members: [
+            "Bernardo Lapara",
+            "Joseph Casin0",
+            "Rowela Nazareno",
+            "Regina Julaton",
+            "Lorena Rontos",
+            "Louie Bustamante",
+            "Edgar Peru",
+          ],
+        },
+        "Nag-uma": {
+          punong: "Leslie Onate",
+          secretary: "Elma Degui�o",
+          treasurer: "Rica O�ate",
+          sk_chair: "Rodrigo Valentino Jr.",
+          sb_members: [
+            "Bernalda Balantino",
+            "Vicente Victoriano",
+            "Sandy Bantulod",
+            "Janet Bantulod",
+            "Edwardo Jalayahay",
+            "Belinday Palioc",
+            "Roxan Degui�o",
+          ],
+        },
+        Naga: {
+          punong: "Dielito Solitarios",
+          secretary: "Vilma Mahayag",
+          treasurer: "Arlene Baladjay",
+          sk_chair: "Kaye Baladjay",
+          sb_members: [
+            "Evelyn Camarines",
+            "Eduardo Galban",
+            "Romeo Natividad",
+            "Emilia Mabag",
+            "Efren Camarines",
+            "Pamela Mahayag",
+            "Merle Dealagdon",
+          ],
+        },
+        Navarro: {
+          punong: "Wilfredo Orquin",
+          secretary: "Vina Machubar",
+          treasurer: "Ritchel Manlaya",
+          sk_chair: "Terrie Ann Gacho",
+          sb_members: [
+            "Myra Pacoma",
+            "Angelo Caoyong",
+            "Jocelyn Decenilla",
+            "Asuncion Salamanes",
+            "Joel Orquin",
+            "Maricel Lomahan",
+            "Adelma Catioc",
+          ],
+        },
+        Nijaga: {
+          punong: "Alan Abrito",
+          secretary: "Rodelio Ladroma",
+          treasurer: "Jesha Mae Roseno",
+          sk_chair: "Angelina Tejero",
+          sb_members: [
+            "Danilo Robles",
+            "Norberto Catalan",
+            "Monico Me�ozo",
+            "Elisa Casurao",
+            "Proceso Robles",
+            "Quirino Jumaday Jr.",
+            "Ma. Romela Dee",
+          ],
+        },
+        Oboob: {
+          punong: "Francisco Chuca Jr",
+          secretary: "Glenda Delequi�a",
+          treasurer: "Crystal Mae Dimakiling",
+          sk_chair: "Alliana Dealagdon",
+          sb_members: [
+            "Alfredo Pulod",
+            "Arlene Pulod",
+            "Ramon Delequi�a JR",
+            "Flora May Tarrayo",
+            "Balbino Dormiendo",
+            "Josefina Abad",
+            "Dodie Degui�o",
+          ],
+        },
+        Obrero: {
+          punong: "Bernardo Antiola",
+          secretary: "Morena Ongcal",
+          treasurer: "Filip Anthony Zamora",
+          sk_chair: "Kimberly Asis",
+          sb_members: [
+            "Dominador Tabogoc JR.",
+            "Rocilyn Aguilar",
+            "Reynaldo Lauderes",
+            "Edwin Reoyan",
+            "Fidencio Tallo",
+            "Ronilo Lauderes",
+            "Arvin Yauder",
+          ],
+        },
+        Olera: {
+          punong: "Geramie Wahingon",
+          secretary: "Mary Jean Labasan",
+          treasurer: "Nobie Sajuyan",
+          sk_chair: "Daniel Diaz",
+          sb_members: [
+            "Novie De Pedro",
+            "Annabelle Valentino",
+            "Anabel Valantino",
+            "Emma Wahingon",
+            "Lina Miano",
+            "Mylene Wahingon",
+            "Nelda Casaljay",
+          ],
+        },
+        Oquendo: {
+          punong: "Michael Loberiano",
+          secretary: "Janine Geradila",
+          treasurer: "Pedrito Aguilar JR.",
+          sk_chair: "Kyla Cano",
+          sb_members: [
+            "Eugenio Yauder JR.",
+            "Liza Coquilla",
+            "Adriano Peru",
+            "Gilbert Amor",
+            "Galileo Barandino",
+            "Bernadette Bedio",
+            "Arnold Sintos",
+          ],
+        },
+        "Osme�a": {
+          punong: "Anastacia Mendoza",
+          secretary: "Fe Mancol",
+          treasurer: "Norsita Tarrayo",
+          sk_chair: "Wilmar Saucero",
+          sb_members: [
+            "Junerey Tarrayo",
+            "Jesus Dealagdon JR",
+            "Romeo Dealagdon",
+            "Geody Dealagdon",
+            "Cesar Saludario",
+            "Lelibeth Miano",
+            "Celso Panzuelo",
+          ],
+        },
+        Pagbalican: {
+          punong: "Cristian Probe",
+          secretary: "Nessa Joy Picorro",
+          treasurer: "Chrisanta Cagomoc",
+          sk_chair: "Janelin Coquilla",
+          sb_members: [
+            "Romeo Coquilla",
+            "Jonalyn Serito",
+            "Ricardo Ornopia",
+            "Wilfredo Coquilla",
+            "Alfie Torculas",
+            "Raffy Dalicano",
+            "Mario Anoba",
+          ],
+        },
+        Palanas: {
+          punong: "Lita Tarrayo",
+          secretary: "Myrna Abarilla",
+          treasurer: "Fe Getigan",
+          sk_chair: "Nerlie Villanueva",
+          sb_members: [
+            "Rolando Getigan",
+            "Romeo Getigan",
+            "Rogelio Getigan",
+            "Bobby Pajarito",
+            "Genara Villanueva",
+            "Ermilta Doinog",
+          ],
+        },
+        Palanogan: {
+          punong: "Nilda Salindayao",
+          secretary: "Daniel Queroda",
+          treasurer: "Maria Mae Degui�o",
+          sk_chair: "Jobeto Tarrayo",
+          sb_members: [
+            "Theresa Francisco",
+            "Eduardo Baito",
+            "Eduardo Laguipo",
+            "Ivie Bello",
+            "Rolando Degui�o",
+            "Alfredo Saucero",
+            "Alexander Derafael",
+          ],
+        },
+        Panlayahan: {
+          punong: "Fernando Raypan",
+          secretary: "Rosemarie Tiempo",
+          treasurer: "Jennifer Mallari",
+          sk_chair: "Jr Poblete",
+          sb_members: [
+            "Annalyn De Los Reyes",
+            "Maria Maricel Semillano",
+            "Eduardo Casaljay",
+            "Marivic Senangote",
+            "Rodel Lucenecio",
+            "Sherlita Lucenecio",
+            "Edmar Montemayor",
+          ],
+        },
+        Panonongon: {
+          punong: "Rolito Bolano",
+          secretary: "Julie Ann Agosto",
+          treasurer: "Artemio Perito",
+          sk_chair: "Mafaith Bi�ar",
+          sb_members: [
+            "Gilda Bola�o Baby",
+            "Eduardo Tomboc Eddie",
+            "Estrella Politano",
+            "Norberto Bola�o Bing",
+            "Hepolito Bola�o SR",
+            "Maricel Magatines",
+            "Jesus Nuevo Jr",
+          ],
+        },
+        Panoypoy: {
+          punong: "Maria Princess Montaner",
+          secretary: "Pedro Abajo",
+          treasurer: "Francisco Palmares",
+          sk_chair: "Crisanta Ali",
+          sb_members: [
+            "Enrico Pasacas",
+            "Ariel Noda",
+            "Adelfa Barandino",
+            "Ma. Asuncion Torculas",
+            "Vilma Pasacas",
+            "Gilberto Abajo",
+            "Recolito Casida",
+          ],
+        },
+        Patong: {
+          punong: "Sofriano Salonoy",
+          secretary: "Josefina Sabilao",
+          treasurer: "Alma Eyano",
+          sk_chair: "Jemina Taneo",
+          sb_members: [
+            "Ronelo Galanido",
+            "Primitiva Terga",
+            "Sandra Somino",
+            "Julio Terga",
+            "Rindo Taneo",
+            "Jerry Fermino",
+            "Restituto Sabilao",
+          ],
+        },
+        Payahan: {
+          punong: "Joseph Tarrayo",
+          secretary: "Wilfredo Delmonte",
+          treasurer: "Josefina Lagarde",
+          sk_chair: "Castor Troy Dela Torre",
+          sb_members: [
+            "Marc Jayson Cordova",
+            "Erlinda Rivera",
+            "Rolando Jose",
+            "Sherlie Cabasares",
+            "Marifel Ballespin",
+            "Lorenzo Gandamasir",
+            "Justino Rosendo Moslares",
+          ],
+        },
+        "Pe�a": {
+          punong: "Lilia Damalla",
+          secretary: "Marjorie Abia",
+          treasurer: "Marites Monares",
+          sk_chair: "Edison Loyao",
+          sb_members: [
+            "Corazon Monzales",
+            "Maribel Senolos",
+            "Florita Francisco",
+            "Rediloza Montuerto",
+            "Arceli Tomamak",
+            "Virginia Abaja",
+            "Jessie Damalla",
+          ],
+        },
+        Pilar: {
+          punong: "Ursicino Anquilan",
+          secretary: "Adelaida Baragenio",
+          treasurer: "Eva Guarde",
+          sk_chair: "Trexie Hannah Sagadal",
+          sb_members: [
+            "Kinnie Raga",
+            "Ronald Acot-Acot",
+            "Janith Baragenio",
+            "Julio Baragenio",
+            "Perfecta Lagrimas",
+            "Gerardo Cadajas",
+            "Rolly Cadisal",
+          ],
+        },
+        Pinamorotan: {
+          punong: "Romart Verano",
+          secretary: "Felipe Verano JR",
+          treasurer: "Dina Victoriano",
+          sk_chair: "Renold Verano",
+          sb_members: [
+            "Narleta Verano",
+            "Ronnel Wahingon",
+            "Romeo Verano",
+            "Cecilia Esmundo",
+            "Hermenia Verano",
+            "Mely Bantelo",
+            "Renalyn Arandia",
+          ],
+        },
+        Quezon: {
+          punong: "Richard Bernate",
+          secretary: "Gina Brase",
+          treasurer: "Mayvilyn Sayas",
+          sk_chair: "Rica Mae Bello",
+          sb_members: [
+            "Roselle Abrito",
+            "Norberto Macabidang",
+            "Lucia Bansay",
+            "Jocelyn Pasa",
+            "Ma. Sheryl Ibal",
+            "Lydia Bello",
+            "Erma Cui",
+          ],
+        },
+        Rawis: {
+          punong: "Dominador Canaman",
+          secretary: "Evelyn Valles",
+          treasurer: "Pureza Pabunan",
+          sk_chair: "Ronel Caingcoy",
+          sb_members: [
+            "Romeo Velasco",
+            "Edwin Cailo",
+            "Roy Narciso",
+            "Marieta Maasin",
+            "Arlene Mediante",
+            "John Henry Rumohr",
+            "Sheila Godio",
+          ],
+        },
+        "Rizal I": {
+          punong: "Nicanor Balbarona",
+          secretary: "Arlyn Anotado",
+          treasurer: "Emelie Brase",
+          sk_chair: "Rolan Nayanga",
+          sb_members: [
+            "Annalyn Gogolin",
+            "Lino Salvador",
+            "Gil Yabao",
+            "Antonio Gementiza",
+            "Alvin Joseph Fortaleza",
+            "Bernardo Cruda",
+            "Jose Reo Abrito",
+          ],
+        },
+        "Rizal II": {
+          punong: "Floro Edraga",
+          secretary: "Verna Lagahit",
+          treasurer: "Bebiana Solibaga",
+          sk_chair: "Santeh Perido",
+          sb_members: [
+            "Minda Edraga",
+            "Arnold Edraga",
+            "Alexander Macabidang",
+            "Dionesio Boroc JR",
+            "Edgardo Edraga JR",
+            "Norman Patente",
+            "Jobelito Franco",
+          ],
+        },
+        "Roxas I": {
+          punong: "Michael Montemor",
+          secretary: "Romeo Niedo",
+          treasurer: "Antonio Lustre JR.",
+          sk_chair: "Edmund Parane 111",
+          sb_members: [
+            "Benedict Cortado",
+            "Maria Marisa Reoyan",
+            "Rebecca Pransal",
+            "Haidy Abellar",
+            "Crizelda Bosque",
+            "Nestor Sorilo JR.",
+            "Julieta Niedo",
+          ],
+        },
+        "Roxas II": {
+          punong: "Joseph Lomocso",
+          secretary: "Nereen Loberiano",
+          treasurer: "Merlita Macabidang",
+          sk_chair: "Crizel Delos Reyes",
+          sb_members: [
+            "Lomer Cardinas",
+            "Joe Marie Servilla",
+            "Manelyn Sabas",
+            "Josephile Lomocso",
+            "Danilo Lim",
+            "Erwin Juanerio",
+            "Clemente Lasguarda",
+          ],
+        },
+        Saljag: {
+          punong: "Maria Sol Ebardone",
+          secretary: "Joana Marry Montivez",
+          treasurer: "Athela Mercader",
+          sk_chair: "Via Rabe",
+          sb_members: [
+            "Alfredo Pepito",
+            "Lolita Padual",
+            "Elvira Balajadia",
+            "Romel Mercader",
+            "Bienvenido Pepito",
+            "Lonito Calipay Jr",
+            "Tranquilino Pepito Jr.",
+          ],
+        },
+        Salvacion: {
+          punong: "Dionesio Casaljay",
+          secretary: "Shirly Valentino",
+          treasurer: "Nimfa Casaljay",
+          sk_chair: null,
+          sb_members: [
+            "Charita Lacanaria",
+            "Aiem Valentino",
+            "Tirso Domayan",
+            "Rochelle Wahingon",
+            "Dante Correche",
+            "Michelle Correche",
+            "Jocelyn De Leon",
+          ],
+        },
+        "San Antonio": {
+          punong: "Sixto Vicentino",
+          secretary: "Analyn Calagos",
+          treasurer: "Jear Yrigon",
+          sk_chair: "Lorna Casiano",
+          sb_members: [
+            "Arlene Caber",
+            "Romel Derio",
+            "Elizabeth Valentino",
+            "Edwardo Vicentino JR",
+            "Alma Wahingon",
+            "Lorito Deborbon",
+            "Aine Sumolong",
+          ],
+        },
+        "San Isidro": {
+          punong: "Jose Lungsod",
+          secretary: "Jesabel Lacon",
+          treasurer: "Dominga Panzuelo",
+          sk_chair: "Jasmine Sabilao",
+          sb_members: [
+            "Carolina Saucero",
+            "Reynaldo Meregildo",
+            "Amber Anne Walters",
+            "Jury Saucero",
+            "Ricky Panzuelo",
+            "Cecelia Saucero",
+          ],
+        },
+        "San Joaquin": {
+          punong: "Silverio Palima SR.",
+          secretary: "Marlyn Ras",
+          treasurer: "Nova Dasig",
+          sk_chair: "Arjay Taneo",
+          sb_members: [
+            "Djuvan Tan JR.",
+            "James Taperla",
+            "Myrna Talon",
+            "Wilfredo Delgado JR.",
+            "Jaime Amoto JR.",
+            "Rey Francis Lim",
+            "Pedro Bonayog JR.",
+          ],
+        },
+        "San Jose": {
+          punong: "Clarita Sevillano",
+          secretary: "Cris Alona Jhane Jalayajay",
+          treasurer: "Jenrose Buracan",
+          sk_chair: "Jay Rio Jalayajay",
+          sb_members: [
+            "Jessie Belino",
+            "Josephine Deguino",
+            "Yolando Agte",
+            "Ernesto Belino",
+            "Ma Fe Dealagdon",
+            "Rodel Alpido",
+            "Ruperto Yrigon JR",
+          ],
+        },
+        "San Policarpo": {
+          punong: "Lydia Naparan",
+          secretary: "Jude Setarios",
+          treasurer: "Julieta Bagadiong",
+          sk_chair: "Daryl Maranguez",
+          sb_members: [
+            "Raul Nacorda",
+            "Glenn Ortiz",
+            "Sopriano Romano",
+            "Renel Aguilar",
+            "Maria Elma Rubante",
+            "Alberto Jaculba",
+            "I�ego Paulino",
+          ],
+        },
+        "San Rufino": {
+          punong: "Reynaldo Datiles",
+          secretary: "Jose Delos Reyes",
+          treasurer: "Joemel Basbas",
+          sk_chair: "Ian Jasper Miano",
+          sb_members: [
+            "Richie Nabares",
+            "Marlon Alejandrino",
+            "Mark Galamiton",
+            "Errol John Gilhang",
+            "Rita Castillo",
+            "Margie Basical",
+            "Dominador Ricalde",
+          ],
+        },
+        Saputan: {
+          punong: "Bonifacio Capeding",
+          secretary: "Antonio Aniana",
+          treasurer: "Gina Jarogon",
+          sk_chair: "Bea Capeding",
+          sb_members: [
+            "Tirso Batican",
+            "Michael Jumaday",
+            "Terencio Corpenio",
+            "Armando Bacsal",
+            "Alberto Sorilo",
+            "Roger Casa�a",
+            "Rolando Tarrayo",
+          ],
+        },
+        Sigo: {
+          punong: "Peter Tarrayo SR.",
+          secretary: "Marwen Joe Villamor",
+          treasurer: "Liza Romangaya",
+          sk_chair: "Brayn Jay Francisco",
+          sb_members: [
+            "Marlene Francisco",
+            "Pepito Noro�a JR",
+            "Wilfredo Bocade",
+            "Conrado Cangayao JR",
+            "Mary Ann Lucapa",
+            "Rosalinda Salino",
+            "Jan Christian Casaljay",
+          ],
+        },
+        Sinantan: {
+          punong: "Jeronimo Velasco",
+          secretary: "Ma.  Donna Rosino",
+          treasurer: "Virginia Eugenio",
+          sk_chair: "Hadji Ramos",
+          sb_members: [
+            "Joselito Jalayajay",
+            "Ryshiel Rosino",
+            "Chona Bacsal",
+            "Manuel Velasco",
+            "Diocela Rosino",
+            "Marites Dela Cruz",
+            "Susan Buracan",
+          ],
+        },
+        "Sinidman Occidental": {
+          punong: "Romeo Olojan",
+          secretary: "Maria Ana Cortel",
+          treasurer: "Letecia Coquilla",
+          sk_chair: "Mary Grace Bustamante",
+          sb_members: [
+            "Florissa Rontos",
+            "Diosdado Repaja",
+            "Rolando Sildo",
+            "Reynoso Mission",
+            "Constancia Ostaya",
+            "Chevy Baloca",
+            "Lilia Yu",
+          ],
+        },
+        "Sinidman Oriental": {
+          punong: "Maximo Dela Cruz",
+          secretary: "Cecille Disbarro",
+          treasurer: "Marilou Romulo",
+          sk_chair: "Jacel Disbarro",
+          sb_members: [
+            "Fidel Catalan",
+            "Edberto Alvarez",
+            "Narciso Tocayon",
+            "Ma. Liza Mangubat",
+            "Alfredo Sermense",
+            "Roberto Lopar Sr.",
+            "Petronilo Catalan",
+          ],
+        },
+        Tabawan: {
+          punong: "Concordio Carijutan",
+          secretary: "Ramel Calagos",
+          treasurer: "Janette Davila",
+          sk_chair: "Nica Ella Aliman",
+          sb_members: [
+            "Avelino Payos",
+            "Fernando Imperial",
+            "Jessie Panes",
+            "Mary Daryl Calagos",
+            "Edna Daguman",
+            "Roy Togonon",
+            "Delia Morado",
+          ],
+        },
+        Talahiban: {
+          punong: "Cristina Juanerio",
+          secretary: "Lorna Palioc",
+          treasurer: "Allan Andaya",
+          sk_chair: "Mary Jane Alcomendas",
+          sb_members: [
+            "Elmer Bello",
+            "Cristina Bello",
+            "Cristina Saludario",
+            "Rosalina Agte",
+            "Basilla Tan",
+            "Nolito Lacon",
+            "Manuel Bordan",
+          ],
+        },
+        Tanval: {
+          punong: "Nole Onate",
+          secretary: "Jovencio Valantino SR",
+          treasurer: "Florida Valentino",
+          sk_chair: "Dailyn Matudan",
+          sb_members: [
+            "Rene Casaljay",
+            "Narcisa O�ate",
+            "Rodito Casaljay",
+            "Eday Valentino",
+            "Joan Casaljay",
+            "Nelia Albuera",
+            "Dominador Casaljay",
+          ],
+        },
+        Tapae: {
+          punong: "Romeo Catalan",
+          secretary: "Dennisa Decamon",
+          treasurer: "Marites Ejorcadas",
+          sk_chair: "Ruel Catalan JR.",
+          sb_members: [
+            "Reynaldo Calong",
+            "Roselda Rama",
+            "Bryan Ejorcadas",
+            "Andres Rollo",
+            "Marvin Trani",
+            "Felipe Rama jr",
+            "Remecio Catalan",
+          ],
+        },
+        Tarabucan: {
+          punong: "Fernando Gaspan",
+          secretary: "Bong Anthony Panzuelo",
+          treasurer: "Liza Carpio",
+          sk_chair: "Heart Magbutay",
+          sb_members: [
+            "Maria Glaiza Daiz",
+            "Raul Calderon",
+            "Remar Tafalla",
+            "Alicia Juanerio",
+            "Roberto Lim",
+            "Rowena Miano",
+            "Marilou Alijid",
+          ],
+        },
+        Tigbe: {
+          punong: "Crudo Bello",
+          secretary: "Jason Lacon",
+          treasurer: "Michael Lacon",
+          sk_chair: "Jenny Palloc",
+          sb_members: [
+            "Anecita Taneo",
+            "Gloria Taneo",
+            "Jovelyn Luciano",
+            "Rizza Legason",
+            "Jonel Panzuelo",
+            "Hiraldo Taneo",
+            "Mary Taneo",
+          ],
+        },
+        "Tinambacan Norte": {
+          punong: "Orselyn Obinos",
+          secretary: "Joan Mercader",
+          treasurer: "Mercedes Penote",
+          sk_chair: "Zyra Calesa",
+          sb_members: [
+            "Remegio Pallones Remy",
+            "Virgilio Albina",
+            "Dominador Cuizon",
+            "Benjamin Valley",
+            "Prudencio Luaton",
+            "Jaime Castante",
+            "Manuel Enriquez",
+          ],
+        },
+        "Tinambacan Sur": {
+          punong: "Raul Reyes",
+          secretary: "Gerold Rosima",
+          treasurer: "Vincent Serrato",
+          sk_chair: "Rich Leoh Bayonon",
+          sb_members: [
+            "Erlinda Pelotos",
+            "Remedios Serrato",
+            "Pablito Danojog",
+            "Benigno Potal",
+            "Eduardo Simon",
+            "Joylita Binalla",
+            "Evelyn Calesa",
+          ],
+        },
+        Tinaplacan: {
+          punong: "Virginia Paghubasan",
+          secretary: "Christian Sumayo",
+          treasurer: "Adrian Fortuna",
+          sk_chair: "Jessie Fortuna",
+          sb_members: [
+            "Romero Cangayao",
+            "Armando Sumayo",
+            "Roger Calipay",
+            "Emelyn Salomon",
+            "Antolin Tayab",
+            "Narciso Andaya",
+          ],
+        },
+        Tomaliguez: {
+          punong: "Lucerfido Osabel",
+          secretary: "Ma. Cecilia Merencillo",
+          treasurer: "Lourdes Omila",
+          sk_chair: "Ervin Jhon Pomida",
+          sb_members: [
+            "Arnold Gal",
+            "Ellen Mauyao",
+            "Claudio Aranzado Sr",
+            "Hanzie Mercader",
+            "Teotima Pepito",
+            "Ronnie Fuenteblanca",
+            "Maria Lina Cuaton",
+          ],
+        },
+        Trinidad: {
+          punong: "Nestor Porlares",
+          secretary: "Alicia Mainke",
+          treasurer: "Teresita Leones",
+          sk_chair: "John Kevin Aquino III",
+          sb_members: [
+            "Ike Labradores",
+            "Jemason Nicandro Lim",
+            "Neptave Cano Jr",
+            "Owen Tolibas",
+            "Alberto Ricalde Jr",
+            "Joseph Cabasaan",
+            "Pedro Rosellas Jr",
+          ],
+        },
+        Victory: {
+          punong: "Susana Gacelos",
+          secretary: "Rowena Dusa",
+          treasurer: "Lorna Abria",
+          sk_chair: "Jessa Magbutay",
+          sb_members: [
+            "Cherlita Galang",
+            "Raul Gacelos",
+            "Gina Manaog",
+            "Danilo Asemplo",
+            "Myrna Carijutan",
+            "Romeo Gacelos",
+            "Marlito De Guia",
+          ],
+        },
+        Villahermosa: {
+          punong: "Judy Ann Derio",
+          secretary: "Rissel Clarido",
+          treasurer: "Alona Manlaya",
+          sk_chair: "Germa Managaysay",
+          sb_members: [
+            "Julito Barona",
+            "Susana Be�o",
+            "Ma. Emelda Aloquino",
+            "Sonia Bola�o",
+            "Myrna Maca",
+            "Jesus Clarido",
+            "Florentino Eugenio",
+          ],
+        },
+      };
+      function showInfo(props, layer) {
+        selectedName = props.BARANGAY;
+        selectedDistrict = props.DISTRICT_N;
+        document.getElementById("ipName").textContent = props.BARANGAY;
+        // const dc = DC[props.DISTRICT_N]||'#94a3b8';
+        // document.getElementById('ipDistrict').innerHTML =
+        //   `<span style="color:${dc};font-size:11px;">? ${props.DISTRICT_N} District</span>`;
+        document.getElementById("ipCode").textContent = props.BARANGAY_C || "�";
+        document.getElementById("ipArea").textContent = fmtArea(
+          props.LAND_AREA,
+        );
+        document.getElementById("ipPop").textContent =
+          props.POP_PROJEC > 0 ? props.POP_PROJEC.toLocaleString() : "�";
+        // Populate officials
+        const off = OFFICIALS[props.BARANGAY];
+        const offSection = document.getElementById("ipOfficialsSection");
+        if (off) {
+          offSection.style.display = "block";
+          document.getElementById("ipPunong").textContent = off.punong || "�";
+          document.getElementById("ipSBMembers").innerHTML = off.sb_members
+            .length
+            ? off.sb_members
+                .map((n, i) => `<span>${i + 1}. ${n}</span>`)
+                .join("<br>")
+            : "�";
+          document.getElementById("ipSKChair").textContent =
+            off.sk_chair || "�";
+          document.getElementById("ipSecretary").textContent =
+            off.secretary || "�";
+          document.getElementById("ipTreasurer").textContent =
+            off.treasurer || "�";
+        } else {
+          offSection.style.display = "none";
+        }
+        document.getElementById("infoPanel").classList.add("show");
+
+        // highlight list item with white background
+        document.querySelectorAll(".bitem").forEach((e) => {
+          e.classList.remove("active");
+          e.style.backgroundColor = "";
+        });
+        const li = document.querySelector(`[data-n="${props.BARANGAY}"]`);
+        if (li) {
+          li.classList.add("active");
+          li.style.backgroundColor = "#ffffff";
+          li.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+        if (labelsVisible) createLabels();
+      }
+
+      function closeInfo() {
+        document.getElementById("infoPanel").classList.remove("show");
+        selectedName = null;
+        document.querySelectorAll(".bitem").forEach((e) => {
+          e.classList.remove("active");
+          e.style.backgroundColor = "";
+        });
+        hideSelectedLabel();
+        if (geoLayer) geoLayer.resetStyle();
+        renderGeoLayer();
+        if (labelsVisible) createLabels();
+      }
+
+      function renderGeoLayer() {
+        if (geoLayer) map.removeLayer(geoLayer);
+
+        geoLayer = L.geoJSON(GEOJSON, {
+          style(feat) {
+            const isSelected = feat.properties.BARANGAY === selectedName;
+            const inSelectedDistrict =
+              selectedDistrict &&
+              feat.properties.DISTRICT_N === selectedDistrict;
+            return {
+              fillColor: isSelected
+                ? DC_ACTIVE[feat.properties.DISTRICT_N] ||
+                  getFill(feat.properties)
+                : getFill(feat.properties),
+              fillOpacity: isSelected
+                ? 0.9
+                : selectedDistrict
+                  ? inSelectedDistrict
+                    ? 0.85
+                    : 0.32
+                  : 0.65,
+              stroke: true,
+              color: isSelected
+                ? "rgba(255,255,255,0.95)"
+                : selectedDistrict
+                  ? inSelectedDistrict
+                    ? "rgba(255,255,255,0.6)"
+                    : "rgba(255,255,255,0.18)"
+                  : "rgba(255,255,255,0.4)",
+              weight: isSelected
+                ? 2.8
+                : selectedDistrict
+                  ? inSelectedDistrict
+                    ? 1.8
+                    : 1
+                  : 1.3,
+              opacity: 1,
+              lineCap: "round",
+              lineJoin: "round",
+              dashArray: null,
+              className: "polygon-enhanced",
+            };
+          },
+          onEachFeature(feat, layer) {
+            const p = feat.properties;
+            layer.on({
+              click(e) {
+                L.DomEvent.stopPropagation(e);
+                selectedName = p.BARANGAY;
+                selectedDistrict = p.DISTRICT_N;
+                const bounds = layer.getBounds();
+                const targetZoom = getSelectionZoom(bounds, p);
+                map.flyTo(bounds.getCenter(), targetZoom, {
+                  animate: true,
+                  duration: 0.8,
+                });
+                showInfo(p, layer);
+                showSelectedLabel(p.BARANGAY, feat);
+                document.getElementById("distFilter").value =
+                  selectedDistrict || "";
+                renderList();
+                updateLegend();
+                geoLayer.setStyle((f) => ({
+                  fillColor:
+                    f.properties.BARANGAY === p.BARANGAY
+                      ? DC_ACTIVE[f.properties.DISTRICT_N] ||
+                        getFill(f.properties)
+                      : getFill(f.properties),
+                  fillOpacity:
+                    f.properties.BARANGAY === p.BARANGAY
+                      ? 0.9
+                      : f.properties.DISTRICT_N === selectedDistrict
+                        ? 0.85
+                        : 0.32,
+                  stroke: true,
+                  color:
+                    f.properties.BARANGAY === p.BARANGAY
+                      ? "rgba(255,255,255,0.9)"
+                      : f.properties.DISTRICT_N === selectedDistrict
+                        ? "rgba(255,255,255,0.6)"
+                        : "rgba(255,255,255,0.18)",
+                  weight:
+                    f.properties.BARANGAY === p.BARANGAY
+                      ? 2.5
+                      : f.properties.DISTRICT_N === selectedDistrict
+                        ? 1.8
+                        : 1,
+                }));
+              },
+              mouseover(e) {
+                if (p.BARANGAY !== selectedName)
+                  e.target.setStyle({
+                    fillOpacity: 0.85,
+                    weight: 1.8,
+                    color: "rgba(255,255,255,0.6)",
+                  });
+              },
+              mouseout(e) {
+                if (p.BARANGAY !== selectedName) geoLayer.resetStyle(e.target);
+              },
+            });
+          },
+        }).addTo(map);
+      }
+
+      async function renderRoadsLayer() {
+        if (!ROAD_NETWORK_GEOJSON_WGS84) return;
+        if (roadsLayer) map.removeLayer(roadsLayer);
+
+        // Some exported road datasets may have longitudes shifted (e.g. 122 instead of 124).
+        // Detect and correct at runtime to avoid editing large generated files.
+        let roadData = ROAD_NETWORK_GEOJSON_WGS84;
+        try {
+          const firstFeat =
+            roadData && roadData.features && roadData.features[0];
+          let sampleLon = null;
+          let sampleLat = null;
+          if (firstFeat && firstFeat.geometry && firstFeat.geometry.coordinates) {
+            const c = firstFeat.geometry.coordinates;
+            // handle LineString / MultiLineString / Polygon sampling
+            if (Array.isArray(c[0]) && Array.isArray(c[0][0])) {
+              sampleLon = c[0][0][0];
+              sampleLat = c[0][0][1];
+            } else if (Array.isArray(c[0])) {
+              sampleLon = c[0][0];
+              sampleLat = c[0][1];
+            } else {
+              sampleLon = c[0];
+              sampleLat = c[1];
+            }
+          }
+          let boundarySampleLat = null;
+          if (window.GEOJSON && GEOJSON.features && GEOJSON.features[0]) {
+            const bc = GEOJSON.features[0].geometry.coordinates;
+            if (Array.isArray(bc[0]) && Array.isArray(bc[0][0])) boundarySampleLat = bc[0][0][1];
+          }
+          console.log('[RENDER ROADS] Sample road coord at render time:', sampleLon, sampleLat);
+          console.log('[RENDER ROADS] Reference boundary lat:', boundarySampleLat);
+
+          let lonShift = 0;
+          let latShift = 0;
+          if (typeof sampleLon === 'number' && sampleLon < 123) {
+            lonShift = 2.0;
+          }
+          if (
+            typeof sampleLat === 'number' &&
+            typeof boundarySampleLat === 'number' &&
+            boundarySampleLat - sampleLat > 0.01 &&
+            boundarySampleLat - sampleLat < 0.2
+          ) {
+            latShift = Number((boundarySampleLat - sampleLat).toFixed(6));
+          } else if (typeof sampleLat === 'number' && sampleLat < 12.12) {
+            // Default small nudge (was positive); adjust downward slightly for better alignment
+            latShift = 0.00494111111111;; // move roads slightly downward
+          }
+
+          // Manual micro-adjustments requested by user: small rightward and downward tweak
+          const manualLonAdjust = 0.0006; // small move to the right
+          const manualLatAdjust = -0.0006; // small move downward
+          lonShift = lonShift + manualLonAdjust;
+          latShift = latShift + manualLatAdjust;
+
+          if (lonShift || latShift) {
+            console.warn(
+              'Road network looks shifted; applying lonShift=',
+              lonShift,
+              ' latShift=',
+              latShift,
+            );
+            roadData = JSON.parse(JSON.stringify(ROAD_NETWORK_GEOJSON_WGS84));
+            const adjust = (coords) => {
+              if (typeof coords[0] === 'number' && typeof coords[1] === 'number') {
+                if (lonShift) coords[0] = coords[0] + lonShift;
+                if (latShift) coords[1] = coords[1] + latShift;
+                return;
+              }
+              for (let i = 0; i < coords.length; i++) adjust(coords[i]);
+            };
+            roadData.features.forEach((f) => {
+              if (f && f.geometry && f.geometry.coordinates) adjust(f.geometry.coordinates);
+            });
+          } else {
+            console.log('[RENDER ROADS] Coordinate already normalized, no runtime shift needed');
+          }
+        } catch (err) {
+          console.warn("Error normalizing road coordinates:", err);
+        }
+
+        // Road dataset has already been normalized to WGS84.
+        // Automatic alignment to OpenStreetMap can mis-shift the local road network,
+        // so it is disabled by default for stability.
+
+        // Use road network data (possibly corrected) - coordinates should be in WGS84
+        // Data is aligned with barangay polygons and basemap layers
+        roadsLayer = L.geoJSON(roadData, {
+          pane: "overlayPane",
+          style(feature) {
+            return {
+              color: "#ff4757",
+              weight: 2,
+              opacity: 0.8,
+              lineCap: "round",
+              lineJoin: "round",
+              className: "road-network-line",
+              // Ensure roads remain consistent width across zoom levels on supported browsers
+              dashArray: "none",
+            };
+          },
+          onEachFeature(feat, layer) {
+            const roadName = feat.properties.Name || "Road Network";
+            layer.bindTooltip(roadName, {
+              permanent: false,
+              className: "leaflet-tooltip-cb",
+            });
+
+            // Add interactive hover effects
+            layer.on({
+              mouseover(e) {
+                e.target.setStyle({
+                  weight: 3,
+                  color: "#ff6b81",
+                  opacity: 1,
+                });
+                e.target.bringToFront();
+              },
+              mouseout(e) {
+                e.target.setStyle({
+                  weight: 2,
+                  color: "#ff4757",
+                  opacity: 0.8,
+                });
+              },
+            });
+          },
+        });
+
+        // Add to map with proper z-order (below labels, above base layer)
+        roadsLayer.addTo(map);
+
+        // Ensure proper rendering
+        if (roadsLayer instanceof L.FeatureGroup) {
+          roadsLayer.eachLayer((layer) => {
+            if (layer.setStyle) {
+              layer.setStyle({
+                pane: "overlayPane",
+              });
+            }
+          });
+        }
+      }
+
+      function renderResidentialLayer() {
+        if (!RESIDENTIAL_GEOJSON_WGS84) return;
+        if (residentialLayer) map.removeLayer(residentialLayer);
+
+        residentialLayer = L.geoJSON(RESIDENTIAL_GEOJSON_WGS84, {
+          style() {
+            return {
+              fillColor: "#2ecc71",
+              fillOpacity: 0.4,
+              stroke: true,
+              color: "#27ae60",
+              weight: 1,
+              lineCap: "round",
+              lineJoin: "round",
+              dashArray: "2,4",
+              className: "residential-area",
+            };
+          },
+          onEachFeature(feat, layer) {
+            layer.bindTooltip("Residential Area", {
+              permanent: false,
+              className: "leaflet-tooltip-cb",
+            });
+            layer.on({
+              mouseover(e) {
+                e.target.setStyle({
+                  fillOpacity: 0.6,
+                  weight: 2,
+                  color: "#1db954",
+                });
+              },
+              mouseout(e) {
+                e.target.setStyle({
+                  fillOpacity: 0.4,
+                  weight: 1,
+                  color: "#27ae60",
+                });
+              },
+            });
+          },
+        }).addTo(map);
+      }
+
+      function updateLegend() {
+        const title = document.getElementById("legTitle");
+        const items = document.getElementById("legItems");
+        if (currentMode === "district") {
+          title.textContent = "District";
+          items.innerHTML = `
+      <div class="leg-item clickable" data-dist="Calbayog"><div class="leg-swatch" style="background:#99ccff"></div>Calbayog (84)</div>
+      <div class="leg-item clickable" data-dist="Oquendo"><div class="leg-swatch" style="background:#ff9999"></div>Oquendo (46)</div>
+      <div class="leg-item clickable" data-dist="Tinambacan"><div class="leg-swatch" style="background:#ffff99"></div>Tinambacan (27)</div>
+      <div class="leg-item"><div class="leg-swatch" style="background:#2ecc71;opacity:0.6"></div>Residential Areas</div>
+      <div class="leg-item"><div class="leg-swatch" style="background:#ff4757"></div>Road Network</div>`;
+          Array.from(items.querySelectorAll(".leg-item.clickable")).forEach(
+            (el) => {
+              el.classList.toggle(
+                "active-legend",
+                el.dataset.dist === selectedDistrict,
+              );
+              el.addEventListener("click", () =>
+                focusDistrict(el.dataset.dist),
+              );
+            },
+          );
+        } else if (currentMode === "pop") {
+          title.textContent = "Population (projected)";
+          items.innerHTML = `
+      <div class="leg-gradient" style="background:linear-gradient(to right,rgb(255,255,0),rgb(255,140,0))"></div>
+      <div class="leg-scale"><span>Low</span><span>High (5,675)</span></div>`;
+        } else if (currentMode === "area") {
+          title.textContent = "Land Area";
+          items.innerHTML = `
+      <div class="leg-gradient" style="background:linear-gradient(to right,rgb(135,206,235),rgb(25,25,112))"></div>
+      <div class="leg-scale"><span>Small</span><span>Large</span></div>`;
+        } else if (currentMode === "cadastre") {
+          title.textContent = "Cadastre Status";
+          items.innerHTML = `
+      <div class="leg-item"><div class="leg-swatch" style="background:#7ecac3"></div>Surveyed</div>
+      <div class="leg-item"><div class="leg-swatch" style="background:#e07b54"></div>Un-Surveyed</div>
+      <div class="leg-item"><div class="leg-swatch" style="background:#6b7d93"></div>Unknown</div>`;
+        }
+      }
+
+      function setMode(mode) {
+        currentMode = mode;
+        document.getElementById("modeSelector").value = mode;
+        renderGeoLayer();
+        if (labelsVisible) createLabels();
+        updateLegend();
+      }
+
+      function focusDistrict(district) {
+        if (selectedDistrict === district) {
+          selectedDistrict = null;
+          document.getElementById("distFilter").value = "";
+        } else {
+          selectedDistrict = district;
+          document.getElementById("distFilter").value = district;
+        }
+        selectedName = null;
+        renderList();
+        renderGeoLayer();
+        if (labelsVisible) createLabels();
+        updateLegend();
+      }
+
+      // Sidebar list
+      function getFiltered() {
+        const q = document.getElementById("searchBox").value.toLowerCase();
+        const dist = document.getElementById("distFilter").value;
+        let list = GEOJSON.features
+          .map((f) => f.properties)
+          .filter(
+            (p) =>
+              p.BARANGAY &&
+              (!q || p.BARANGAY.toLowerCase().includes(q)) &&
+              (!dist || p.DISTRICT_N === dist),
+          );
+        list.sort((a, b) => a.BARANGAY.localeCompare(b.BARANGAY));
+        return list;
+      }
+
+      function renderList() {
+        const list = getFiltered();
+        document.getElementById("listHdr").textContent =
+          `${list.length} barangay${list.length !== 1 ? "s" : ""}`;
+        const el = document.getElementById("bList");
+        el.innerHTML = list
+          .map((p) => {
+            return `<div class="bitem ${selectedName === p.BARANGAY ? "active" : ""}" data-n="${p.BARANGAY}" onclick="flyTo('${p.BARANGAY.replace(/'/g, "\'")}')">
+      <div class="bname">${p.BARANGAY}</div>
+    </div>`;
+          })
+          .join("");
+      }
+
+      function flyTo(name) {
+        const feat = GEOJSON.features.find(
+          (f) => f.properties.BARANGAY === name,
+        );
+        if (!feat) return;
+        const layer = findLayer(name);
+        if (layer) {
+          const bounds = layer.getBounds();
+          selectedName = name;
+          selectedDistrict = feat.properties.DISTRICT_N;
+          document.getElementById("distFilter").value = selectedDistrict || "";
+          renderList();
+          updateLegend();
+          const targetZoom = getSelectionZoom(bounds, feat.properties);
+          map.flyTo(bounds.getCenter(), targetZoom, {
+            animate: true,
+            duration: 0.8,
+          });
+          showInfo(feat.properties, layer);
+          showSelectedLabel(name, feat);
+          geoLayer.setStyle((f) => ({
+            fillColor:
+              f.properties.BARANGAY === name
+                ? DC_ACTIVE[f.properties.DISTRICT_N] || getFill(f.properties)
+                : getFill(f.properties),
+            fillOpacity: f.properties.BARANGAY === name ? 0.9 : 0.65,
+            stroke: f.properties.BARANGAY === name ? false : true,
+            color: "rgba(255,255,255,0.2)",
+            weight: 0.8,
+          }));
+        }
+      }
+
+      function findLayer(name) {
+        let found = null;
+        geoLayer.eachLayer((l) => {
+          if (l.feature && l.feature.properties.BARANGAY === name) found = l;
+        });
+        return found;
+      }
+
+      function toggleLabels() {
+        const chk = document.getElementById("btnLabels");
+        labelsVisible = chk.checked;
+        const zoom = map.getZoom();
+        if (labelsVisible) {
+          if (zoom >= 12) {
+            createLabels();
+          } else {
+            // Do not zoom automatically; ask user to zoom in first.
+            labelsVisible = false;
+            chk.checked = false;
+            document.getElementById("zoomModal").classList.add("show");
+          }
+        } else {
+          if (labelLayer) map.removeLayer(labelLayer);
+        }
+      }
+
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const toggle = document.getElementById("sbOpenBtn");
+        sidebar.classList.toggle("hidden");
+        toggle.textContent = sidebar.classList.contains("hidden") ? "▶" : "◀";
+        toggle.title = sidebar.classList.contains("hidden")
+          ? "Show sidebar"
+          : "Hide sidebar";
+        // Trigger map resize after transition
+        setTimeout(() => map.invalidateSize(), 300);
+      }
+
+      function toggleResidential() {
+        const btn = document.getElementById("btnResidential");
+        if (residentialLayer && map.hasLayer(residentialLayer)) {
+          map.removeLayer(residentialLayer);
+          btn.classList.remove("active");
+        } else {
+          if (!residentialLayer) renderResidentialLayer();
+          else map.addLayer(residentialLayer);
+          btn.classList.add("active");
+        }
+        updateLegend();
+      }
+
+      async function toggleRoads() {
+        const btn = document.getElementById("btnRoad");
+        if (roadsLayer && map.hasLayer(roadsLayer)) {
+          map.removeLayer(roadsLayer);
+          btn.classList.remove("active");
+        } else {
+          if (!roadsLayer) {
+            await renderRoadsLayer();
+          } else {
+            map.addLayer(roadsLayer);
+          }
+          if (roadsLayer) btn.classList.add("active");
+        }
+        updateLegend();
+      }
+
+      // Align road dataset to OpenStreetMap using Overpass API by computing centroid offset
+      async function alignRoadsToOSM(roadData) {
+        if (!roadData || !roadData.features || roadData.features.length === 0) return;
+        // Use map bounds if available; fallback to GEOJSON extent
+        let bounds = null;
+        if (map && map.getBounds) bounds = map.getBounds();
+
+        let south, west, north, east;
+        if (bounds) {
+          south = bounds.getSouth();
+          north = bounds.getNorth();
+          west = bounds.getWest();
+          east = bounds.getEast();
+        } else {
+          // compute extent from GEOJSON
+          let minLon = Infinity, minLat = Infinity, maxLon = -Infinity, maxLat = -Infinity;
+          GEOJSON.features.forEach((f) => {
+            const coords = f.geometry && f.geometry.coordinates;
+            const walk = (c) => {
+              if (!Array.isArray(c)) return;
+              if (typeof c[0] === 'number' && typeof c[1] === 'number') {
+                minLon = Math.min(minLon, c[0]);
+                minLat = Math.min(minLat, c[1]);
+                maxLon = Math.max(maxLon, c[0]);
+                maxLat = Math.max(maxLat, c[1]);
+                return;
+              }
+              for (let i = 0; i < c.length; i++) walk(c[i]);
+            };
+            if (coords) walk(coords);
+          });
+          south = minLat; west = minLon; north = maxLat; east = maxLon;
+        }
+
+        if (!isFinite(south) || !isFinite(north) || !isFinite(west) || !isFinite(east)) return;
+
+        // Slightly expand bbox to ensure coverage
+        const padLon = (east - west) * 0.1 || 0.02;
+        const padLat = (north - south) * 0.1 || 0.02;
+        south -= padLat; north += padLat; west -= padLon; east += padLon;
+
+        const query = `[out:json][timeout:25];(way["highway"](${south},${west},${north},${east}););out geom;`;
+        let resp;
+        try {
+          console.info('Requesting OSM highway ways for bbox', south, west, north, east);
+          // Overpass expects form-encoded 'data' param when posting queries
+          const formBody = 'data=' + encodeURIComponent(query);
+          resp = await fetch('https://overpass-api.de/api/interpreter', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+            body: formBody,
+          });
+        } catch (e) {
+          console.warn('Overpass fetch failed', e);
+          return;
+        }
+        if (!resp || !resp.ok) return;
+        const data = await resp.json();
+        console.info('Overpass returned elements:', data && data.elements && data.elements.length);
+        if (!data.elements || data.elements.length === 0) return;
+
+        // collect OSM points
+        const osmPoints = [];
+        data.elements.forEach((el) => {
+          if (el.geometry && Array.isArray(el.geometry)) {
+            el.geometry.forEach((g) => {
+              if (typeof g.lon === 'number' && typeof g.lat === 'number') osmPoints.push([g.lon, g.lat]);
+            });
+          }
+        });
+        if (osmPoints.length === 0) return;
+
+        const mean = (pts) => {
+          let sx = 0, sy = 0;
+          pts.forEach((p) => { sx += p[0]; sy += p[1]; });
+          return [sx / pts.length, sy / pts.length];
+        };
+        const osmCent = mean(osmPoints);
+
+        // compute centroid of our roadData
+        const ourPoints = [];
+        const collect = (coords) => {
+          if (!Array.isArray(coords)) return;
+          if (typeof coords[0] === 'number' && typeof coords[1] === 'number') {
+            ourPoints.push([coords[0], coords[1]]);
+            return;
+          }
+          for (let i = 0; i < coords.length; i++) collect(coords[i]);
+        };
+        roadData.features.forEach((f) => {
+          if (f && f.geometry && f.geometry.coordinates) collect(f.geometry.coordinates);
+        });
+        if (ourPoints.length === 0) return;
+        const ourCent = mean(ourPoints);
+
+        const deltaLon = osmCent[0] - ourCent[0];
+        const deltaLat = osmCent[1] - ourCent[1];
+        const dist = Math.sqrt(deltaLon * deltaLon + deltaLat * deltaLat);
+        // Only apply if reasonable (not huge)
+        if (dist > 0.00001 && dist < 1.0) {
+          const adjust = (coords) => {
+            if (!Array.isArray(coords)) return;
+            if (typeof coords[0] === 'number' && typeof coords[1] === 'number') {
+              coords[0] = coords[0] + deltaLon;
+              coords[1] = coords[1] + deltaLat;
+              return;
+            }
+            for (let i = 0; i < coords.length; i++) adjust(coords[i]);
+          };
+          roadData.features.forEach((f) => {
+            if (f && f.geometry && f.geometry.coordinates) adjust(f.geometry.coordinates);
+          });
+          console.warn('Aligned road dataset to OSM by delta', deltaLon, deltaLat);
+        } else {
+          console.info('OSM alignment delta too small or too large, skipped', dist);
+        }
+      }
+
+      function closeZoomModal() {
+        document.getElementById("zoomModal").classList.remove("show");
+      }
+
+      function zoomAndShowLabels() {
+        document.getElementById("zoomModal").classList.remove("show");
+        map.setZoom(14);
+        setTimeout(() => {
+          labelsVisible = true;
+          const btn = document.getElementById("btnLabels");
+          btn.checked = true;
+          createLabels();
+        }, 300);
+      }
+
+      function findLabelPosition(coordinates) {
+        // Find a point guaranteed to be inside the polygon (pole of inaccessibility)
+        // Uses a simple grid-based approach for performance
+
+        const polygon = coordinates[0];
+        if (!polygon || polygon.length < 3) return null;
+
+        // Get polygon bounds
+        let minX = Infinity,
+          minY = Infinity,
+          maxX = -Infinity,
+          maxY = -Infinity;
+        for (let i = 0; i < polygon.length; i++) {
+          const x = polygon[i][0];
+          const y = polygon[i][1];
+          minX = Math.min(minX, x);
+          minY = Math.min(minY, y);
+          maxX = Math.max(maxX, x);
+          maxY = Math.max(maxY, y);
+        }
+
+        // Check if point is inside polygon using ray casting
+        function pointInPolygon(x, y, poly) {
+          let inside = false;
+          for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+            const xi = poly[i][0],
+              yi = poly[i][1];
+            const xj = poly[j][0],
+              yj = poly[j][1];
+
+            if (
+              yi > y !== yj > y &&
+              x < ((xj - xi) * (y - yi)) / (yj - yi) + xi
+            ) {
+              inside = !inside;
+            }
+          }
+          return inside;
+        }
+
+        // Grid search to find best point inside polygon
+        const cellSize = (maxX - minX) / 4;
+        let bestCell = null;
+        let bestDistance = 0;
+
+        // Search grid
+        for (let y = minY; y < maxY; y += cellSize) {
+          for (let x = minX; x < maxX; x += cellSize) {
+            if (pointInPolygon(x, y, polygon)) {
+              // Calculate distance to nearest polygon edge (simple approximation)
+              let minDist = Infinity;
+              for (let i = 0; i < polygon.length; i++) {
+                const j = (i + 1) % polygon.length;
+                const x1 = polygon[i][0],
+                  y1 = polygon[i][1];
+                const x2 = polygon[j][0],
+                  y2 = polygon[j][1];
+
+                // Distance from point to line segment
+                const A = x - x1;
+                const B = y - y1;
+                const C = x2 - x1;
+                const D = y2 - y1;
+                const dot = A * C + B * D;
+                const lenSq = C * C + D * D;
+                let param = -1;
+                if (lenSq !== 0) param = dot / lenSq;
+
+                let dist;
+                if (param < 0) {
+                  dist = Math.sqrt(A * A + B * B);
+                } else if (param > 1) {
+                  dist = Math.sqrt((x - x2) * (x - x2) + (y - y2) * (y - y2));
+                } else {
+                  const xx = x1 + param * C;
+                  const yy = y1 + param * D;
+                  dist = Math.sqrt((x - xx) * (x - xx) + (y - yy) * (y - yy));
+                }
+                minDist = Math.min(minDist, dist);
+              }
+
+              if (minDist > bestDistance) {
+                bestDistance = minDist;
+                bestCell = [x, y];
+              }
+            }
+          }
+        }
+
+        return bestCell;
+      }
+
+      function calculatePolygonCentroid(coords) {
+        // Calculate the actual centroid of a polygon from its coordinates
+        if (!coords || coords.length === 0) return null;
+
+        const polygon = coords[0]; // Use outer ring for simple polygons
+        let area = 0,
+          x = 0,
+          y = 0;
+
+        for (let i = 0; i < polygon.length - 1; i++) {
+          const j = i + 1;
+          const cross =
+            polygon[i][0] * polygon[j][1] - polygon[j][0] * polygon[i][1];
+          area += cross;
+          x += (polygon[i][0] + polygon[j][0]) * cross;
+          y += (polygon[i][1] + polygon[j][1]) * cross;
+        }
+
+        if (area === 0) return null;
+
+        return [x / (3 * area), y / (3 * area)];
+      }
+
+      function showSelectedLabel(name, feat) {
+        // Remove old selected label layer
+        if (selectedLabelLayer) map.removeLayer(selectedLabelLayer);
+
+        // Use provided feature or find first match
+        if (!feat) {
+          feat = GEOJSON.features.find((f) => f.properties.BARANGAY === name);
+        }
+        if (!feat || !feat.geometry) return;
+
+        selectedLabelLayer = L.layerGroup();
+        const geometry = feat.geometry;
+        const district = feat.properties.DISTRICT_N || "";
+        let center = null;
+
+        // Find label position inside polygon
+        if (geometry.type === "Polygon" && geometry.coordinates) {
+          const labelPos = findLabelPosition(geometry.coordinates);
+          if (labelPos) {
+            center = L.latLng(labelPos[1], labelPos[0]);
+          } else {
+            const centroidCoords = calculatePolygonCentroid(
+              geometry.coordinates,
+            );
+            if (centroidCoords) {
+              center = L.latLng(centroidCoords[1], centroidCoords[0]);
+            }
+          }
+        }
+
+        if (!center) {
+          const layer = findLayer(name);
+          if (layer) center = layer.getBounds().getCenter();
+        }
+
+        if (!center) return;
+
+        // Create label with district name to differentiate duplicates
+        const displayLabel = name.replace(/-/g, "&#8209;");
+        const maxBoxWidth = 220;
+        const minFontSize = 11;
+        const maxFontSize = 22;
+        let baseFontSize = 12 + (map.getZoom() - 10) * 1.8;
+        baseFontSize = Math.max(
+          minFontSize,
+          Math.min(baseFontSize, maxFontSize),
+        );
+
+        // Adjust font size based on text length to fit in max box width
+        const charCount = name.length;
+        if (charCount > 25) {
+          baseFontSize = Math.max(minFontSize, baseFontSize * (22 / charCount));
+        } else if (charCount > 18) {
+          baseFontSize = Math.max(minFontSize, baseFontSize * 0.85);
+        } else if (charCount >= 10) {
+          baseFontSize = Math.max(minFontSize, baseFontSize * 0.9);
+        }
+
+        const paddingY = Math.max(4, baseFontSize * 0.45);
+        const paddingX = Math.max(6, baseFontSize * 0.55);
+
+        // Character width calculation for Poppins Bold
+        const charWidth = baseFontSize * 0.6;
+        let textWidth = charCount * charWidth;
+
+        // Calculate content width (actual text area without padding/border)
+        let contentWidth = Math.min(textWidth, maxBoxWidth - paddingX * 2 - 6);
+        let boxWidth = contentWidth + paddingX * 2 + 6;
+        let lines = 1;
+
+        // If text is too wide, let it wrap (unless it has a hyphen connector)
+        if (textWidth > contentWidth && !name.includes("-")) {
+          const charsPerLine = Math.floor(contentWidth / charWidth);
+          lines = Math.ceil(charCount / charsPerLine);
+          if (lines > 3) lines = 3;
+          boxWidth = maxBoxWidth;
+        } else if (name.includes("-")) {
+          // For hyphenated names, expand width to accommodate single line
+          contentWidth = textWidth + 8;
+          boxWidth = contentWidth + paddingX * 2 + 6;
+          lines = 1;
+        }
+
+        // Ensure minimum width
+        boxWidth = Math.max(boxWidth, 90);
+
+        // Height calculation
+        const lineHeight = baseFontSize * 1.35;
+        const boxHeight = lineHeight * lines + paddingY * 2 + 6;
+
+        L.marker(center, {
+          icon: L.divIcon({
+            html: `<div class="selected-label-text" style="font-family:Poppins,sans-serif;font-size:${baseFontSize}px;font-weight:700;color:#000000;text-align:center;text-transform:uppercase;cursor:pointer;line-height:1.35;letter-spacing:0;white-space:${lines === 1 ? "nowrap" : "normal"};word-wrap:break-word;overflow-wrap:break-word;hyphens:auto;padding:${paddingY}px ${paddingX}px;width:${contentWidth}px;background:#ffffff;border:${Math.max(1, baseFontSize * 0.08)}px solid #000000;border-radius:${Math.max(4, baseFontSize * 0.4)}px;box-shadow:0 0 20px rgba(0,0,0,0.4);z-index:1000;position:relative;display:flex;align-items:center;justify-content:center;box-sizing:content-box;">${displayLabel}</div>`,
+            iconSize: [boxWidth, boxHeight],
+            iconAnchor: [boxWidth / 2, boxHeight / 2],
+            className: "selected-label-marker",
+          }),
+          interactive: true,
+          pane: "tooltipPane",
+        }).addTo(selectedLabelLayer);
+
+        selectedLabelLayer.addTo(map);
+      }
+
+      function hideSelectedLabel() {
+        if (selectedLabelLayer) {
+          map.removeLayer(selectedLabelLayer);
+          selectedLabelLayer = null;
+        }
+      }
+
+      function createLabels() {
+        if (labelLayer) map.removeLayer(labelLayer);
+        const zoom = map.getZoom();
+        if (zoom < 10) return;
+        labelLayer = L.layerGroup();
+
+        // Manual position adjustments for specific barangays
+        const labelOffsets = {
+          Matobato: { lat: 0, lng: -0.0008 },
+        };
+
+        // Scale font size smoothly based on zoom level (12-18)
+        const baseFontSize = 10 + (zoom - 12) * 1.2;
+        const iconSize = baseFontSize * 9;
+
+        geoLayer.eachLayer((layer) => {
+          if (layer.feature && layer.feature.geometry) {
+            const geometry = layer.feature.geometry;
+            const name = layer.feature.properties.BARANGAY;
+            if (name === selectedName) return; // Hide original label if selected
+            const properties = layer.feature.properties;
+            if (selectedDistrict && properties.DISTRICT_N !== selectedDistrict)
+              return;
+            const districtColor = DC[properties.DISTRICT_N] || "#94a3b8";
+            let center = null;
+
+            // First try to find a label position guaranteed to be inside polygon
+            if (geometry.type === "Polygon" && geometry.coordinates) {
+              const labelPos = findLabelPosition(geometry.coordinates);
+              if (labelPos) {
+                center = L.latLng(labelPos[1], labelPos[0]);
+              } else {
+                // Fallback to centroid
+                const centroidCoords = calculatePolygonCentroid(
+                  geometry.coordinates,
+                );
+                if (centroidCoords) {
+                  center = L.latLng(centroidCoords[1], centroidCoords[0]);
+                }
+              }
+            }
+
+            // Fallback to bounds center if all else fails
+            if (!center) {
+              const bounds = layer.getBounds();
+              center = bounds.getCenter();
+            }
+
+            // Apply manual offset if exists for this barangay
+            if (labelOffsets[name]) {
+              const offset = labelOffsets[name];
+              center = L.latLng(
+                center.lat + offset.lat,
+                center.lng + offset.lng,
+              );
+            }
+
+            const marker = L.marker(center, {
+              icon: L.divIcon({
+                html: `<div class="label-text" style="font-family:Poppins,sans-serif;font-size:${baseFontSize}px;font-weight:600;color:white;text-align:center;text-transform:uppercase;cursor:pointer;text-shadow:0 0 1px rgba(0,0,0,0.9);line-height:1.2;letter-spacing:0.3px;white-space:nowrap;padding:2px 8px;border-radius:3px;transition:all 0.2s;border:1px solid transparent;overflow:hidden;display:inline-block;">${name}</div>`,
+                iconSize: [iconSize, Math.ceil(baseFontSize * 2.5)],
+                iconAnchor: [iconSize / 2, baseFontSize * 1.25],
+                className: "label-marker",
+              }),
+              interactive: true,
+            });
+
+            // Add click handler to show info and fly to barangay
+            marker.on("click", function (e) {
+              L.DomEvent.stopPropagation(e);
+              flyTo(name);
+            });
+
+            // Add hover effects
+            marker.on("mouseover", function () {
+              const labelDiv = this._icon.querySelector(".label-text");
+              if (labelDiv) {
+                labelDiv.style.backgroundColor = districtColor;
+                labelDiv.style.border = `2px solid ${districtColor}`;
+                labelDiv.style.transform = "scale(1.15)";
+                labelDiv.style.textShadow = `0 0 12px rgba(0,0,0,0.9), 0 0 6px rgba(0,0,0,0.95)`;
+                labelDiv.style.color = "#ffffff";
+              }
+            });
+
+            marker.on("mouseout", function () {
+              const labelDiv = this._icon.querySelector(".label-text");
+              if (labelDiv) {
+                labelDiv.style.backgroundColor = "transparent";
+                labelDiv.style.border = "2px solid transparent";
+                labelDiv.style.transform = "scale(1)";
+                labelDiv.style.textShadow =
+                  "0 0 3px rgba(0,0,0,0.9), 0.5px 0.5px 1px rgba(0,0,0,0.9)";
+                labelDiv.style.color = "white";
+              }
+            });
+
+            marker.addTo(labelLayer);
+          }
+        });
+
+        labelLayer.addTo(map);
+      }
+
+      function updateLabelsOnZoom() {
+        const zoom = map.getZoom();
+        const chk = document.getElementById("btnLabels");
+        const switchContainer = document.querySelector(".switch-container");
+
+        // Always show the switch
+        switchContainer.classList.add("visible");
+
+        // Recreate labels if visible and at proper zoom level
+        if (labelsVisible && zoom >= 12) {
+          createLabels();
+        }
+
+        // Update selected label size if visible
+        if (selectedLabelLayer && selectedName) {
+          showSelectedLabel(selectedName);
+        }
+      }
+
+      document
+        .getElementById("searchBox")
+        .addEventListener("input", renderList);
+      document
+        .getElementById("distFilter")
+        .addEventListener("change", function (e) {
+          selectedDistrict = e.target.value || null;
+          selectedName = null;
+          renderList();
+          renderGeoLayer();
+          // Ensure labels and selected label are refreshed when district changes
+          hideSelectedLabel();
+          if (labelsVisible) createLabels();
+          updateLegend();
+        });
+
+      // Recreate labels on zoom to update font sizes
+      map.on("zoom", updateLabelsOnZoom);
+
+      // Init
+      renderGeoLayer();
+      renderList();
+      updateLegend();
+      map.fitBounds(geoLayer.getBounds(), { padding: [10, 10] });
+      updateLabelsOnZoom();
+      // Don't enable residential layer by default on load — user can toggle it
+      // (renderResidentialLayer() will be called when the user clicks the Residential button)
+
+      // Responsive map handling
+      window.addEventListener("resize", () => {
+        if (map) {
+          setTimeout(() => map.invalidateSize(), 100);
+        }
+      });
+
+      window.addEventListener("orientationchange", () => {
+        setTimeout(() => {
+          if (map) {
+            map.invalidateSize();
+            map.fitBounds(geoLayer.getBounds(), { padding: [10, 10] });
+          }
+        }, 200);
+      });
+
+      // ============================================================
+      // DEV TEAM MODAL FUNCTIONALITY
+      // ============================================================
+      const DEVTEAM_MEMBERS = [
+        {
+          name: "Ruel Plaza II",
+          role: "Lead Programmer / Full Stack Developer",
+          img: "http://calbayog.gov.ph/wp-content/uploads/2026/04/DAJ.jpg",
+        },
+        {
+          name: "Emmanuel Conarco",
+          role: "Front End Developer / UI/UX Designer",
+          img: "http://calbayog.gov.ph/wp-content/uploads/2026/04/EMMAN.jpg",
+        },
+        {
+          name: "Kenowev Amores",
+          role: "Front End Developer",
+          img: "http://calbayog.gov.ph/wp-content/uploads/2026/05/KENO.jpg",
+        },
+        {
+          name: "Dirk Balmes",
+          role: "Web Master",
+          img: "http://calbayog.gov.ph/wp-content/uploads/2026/04/MASTER.png",
+        },
+        {
+          name: "Yonjhel Calipayan",
+          role: "QA Assurance Specialist",
+          img: "http://calbayog.gov.ph/wp-content/uploads/2026/05/YONJHEL.jpg",
+        },
+        {
+          name: "Jelyn Amores",
+          role: "Network System Administrator",
+          img: "http://calbayog.gov.ph/wp-content/uploads/2026/04/JELYN.jpg",
+        },
+        {
+          name: "Christian Paul Cruda",
+          role: "Data Analyst Content Contributor",
+          img: "http://calbayog.gov.ph/wp-content/uploads/2026/04/WAPOT.jpg",
+        },
+        {
+          name: "Angelo Lingling",
+          role: "Data Analyst Content Contributor",
+          img: "http://calbayog.gov.ph/wp-content/uploads/2026/04/ANGELO.png",
+        },
+        {
+          name: "Rainier Gilo Villanueva",
+          role: "DevOps Engineer",
+          img: "http://calbayog.gov.ph/wp-content/uploads/2026/04/GILO.jpg",
+        },
+        {
+          name: "Mark James Tan",
+          role: "Digital Specialist",
+          img: "http://calbayog.gov.ph/wp-content/uploads/2026/04/MARK-JAMES.jpg",
+        },
+        {
+          name: "Jhon Joseph Ybañez",
+          role: "Information Technology Specialist",
+          img: "http://calbayog.gov.ph/wp-content/uploads/2026/04/JOJI-scaled.jpg",
+        },
+        {
+          name: "Francis Mark Mawo",
+          role: "Project Manager",
+          img: "http://calbayog.gov.ph/wp-content/uploads/2025/10/FRANCIS-MARK-MAWO-BUSINESS-CARD-Edited.png",
+        },
+      ];
+
+      function renderDevTeamGrid() {
+        const grid = document.getElementById("devteamGrid");
+        grid.innerHTML = DEVTEAM_MEMBERS.map(
+          (member) => `
+    <div class="devteam-member">
+      <img src="${member.img}" alt="${member.name}" style="width:120px;height:120px;"/>
+      <h3>${member.name}</h3>
+      <p class="devteam-member-role">${member.role}</p>
+    </div>
+  `,
+        ).join("");
+      }
+
+      function openDevTeamModal() {
+        document.getElementById("devteamModalOverlay").classList.add("active");
+        renderDevTeamGrid();
+      }
+
+      function closeDevTeamModal() {
+        document
+          .getElementById("devteamModalOverlay")
+          .classList.remove("active");
+      }
+
+      // Close modal when clicking outside
+      document.addEventListener("DOMContentLoaded", () => {
+        const overlay = document.getElementById("devteamModalOverlay");
+        overlay?.addEventListener("click", (e) => {
+          if (e.target === overlay) closeDevTeamModal();
+        });
+      });
+    </script>
+  </body>
+</html>
