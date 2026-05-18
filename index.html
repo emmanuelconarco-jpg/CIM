@@ -4330,5 +4330,14 @@
         });
       });
     </script>
+    <!-- PWA Support -->
+<link rel="manifest" href="manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/CIM/service-worker.js')
+      .then(() => console.log('Service Worker registered — offline ready!'))
+      .catch(err => console.log('SW Error:', err));
+  }
+</script>
   </body>
 </html>
