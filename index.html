@@ -118,7 +118,7 @@
     </div>
 
     <div class="layout">
-      <div class="sidebar" id="sidebar">
+      <div class="sidebar hidden" id="sidebar">
         <div class="sb-top">
           <div class="sb-header">
             <h3>Barangay Directory</h3>
@@ -153,13 +153,12 @@
             <option value="pop">Population</option>
             <option value="area">Land Area</option>
           </select>
-          <div class="switch-container active" data-layer="sidebar">
+          <div class="switch-container" data-layer="sidebar">
             <label class="switch">
               <input
                 type="checkbox"
                 id="toggleSidebar"
                 onchange="toggleSidebar()"
-                checked
               />
               <span class="slider"></span>
             </label>
@@ -199,13 +198,12 @@
               Road Network
             </label>
           </div>
-          <div class="switch-container active" data-layer="legend">
+          <div class="switch-container" data-layer="legend">
             <label class="switch">
               <input
                 type="checkbox"
                 id="toggleLegend"
                 onchange="toggleLegend()"
-                checked
               />
               <span class="slider"></span>
             </label>
@@ -258,7 +256,7 @@
           </div>
         </div>
 
-        <div class="legend" id="mapLegend">
+        <div class="legend" id="mapLegend" style="display: none;">
           <div class="leg-title" id="legTitle">District</div>
           <div class="leg-items" id="legItems">
             <div class="leg-item">
