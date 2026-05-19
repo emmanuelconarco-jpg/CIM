@@ -146,14 +146,6 @@
 
       <div class="map-wrap">
         <div id="map"></div>
-        <button
-          class="sb-open-btn"
-          id="sbOpenBtn"
-          onclick="toggleSidebar()"
-          title="Hide sidebar"
-        >
-          ◀
-        </button>
 
         <div class="ctrl-bar">
             <select class="sel" id="modeSelector" onchange="setMode(this.value)" style="flex-direction: column;">
@@ -161,6 +153,18 @@
             <option value="pop">Population</option>
             <option value="area">Land Area</option>
           </select>
+          <div class="switch-container active" data-layer="sidebar">
+            <label class="switch">
+              <input
+                type="checkbox"
+                id="toggleSidebar"
+                onchange="toggleSidebar()"
+                checked
+              />
+              <span class="slider"></span>
+            </label>
+            <label class="switch-label" for="toggleSidebar">Show List</label>
+          </div>
           <div class="switch-container">
             <label class="switch">
               <input type="checkbox" id="btnLabels" onchange="toggleLabels()" />
@@ -168,6 +172,7 @@
             </label>
             <label class="switch-label" for="btnLabels">Show Names</label>
           </div>
+
           <div class="switch-container" data-layer="residential">
             <label class="switch">
               <input
@@ -193,6 +198,18 @@
             <label class="switch-label" for="toggleRoads">
               Road Network
             </label>
+          </div>
+          <div class="switch-container active" data-layer="legend">
+            <label class="switch">
+              <input
+                type="checkbox"
+                id="toggleLegend"
+                onchange="toggleLegend()"
+                checked
+              />
+              <span class="slider"></span>
+            </label>
+            <label class="switch-label" for="toggleLegend">Legend</label>
           </div>
         </div>
 
@@ -3661,14 +3678,24 @@
 
       function toggleSidebar() {
         const sidebar = document.getElementById("sidebar");
-        const toggle = document.getElementById("sbOpenBtn");
-        sidebar.classList.toggle("hidden");
-        toggle.textContent = sidebar.classList.contains("hidden") ? "▶" : "◀";
-        toggle.title = sidebar.classList.contains("hidden")
-          ? "Show sidebar"
-          : "Hide sidebar";
+        const toggle = document.getElementById("toggleSidebar");
+        if (!toggle) return;
+        const isVisible = toggle.checked;
+        sidebar.classList.toggle("hidden", !isVisible);
+        const wrapper = document.querySelector('.switch-container[data-layer="sidebar"]');
+        if (wrapper) wrapper.classList.toggle("active", isVisible);
         // Trigger map resize after transition
         setTimeout(() => map.invalidateSize(), 300);
+      }
+
+      function toggleLegend() {
+        const legend = document.getElementById("mapLegend");
+        const toggle = document.getElementById("toggleLegend");
+        if (!legend || !toggle) return;
+        const isVisible = toggle.checked;
+        legend.style.display = isVisible ? "" : "none";
+        const wrapper = document.querySelector('.switch-container[data-layer="legend"]');
+        if (wrapper) wrapper.classList.toggle("active", isVisible);
       }
 
       function toggleResidential() {
@@ -4044,7 +4071,7 @@
         const lineHeight = baseFontSize * 1.35;
         const boxHeight = lineHeight * lines + paddingY * 2 + 6;
 
-        const selMarker = L.marker(center, {
+        L.marker(center, {
           icon: L.divIcon({
             html: `<div class="selected-label-text" style="font-family:Poppins,sans-serif;font-size:${baseFontSize}px;font-weight:700;color:#000000;text-align:center;text-transform:uppercase;cursor:pointer;line-height:1.35;letter-spacing:0;white-space:${lines === 1 ? "nowrap" : "normal"};word-wrap:break-word;overflow-wrap:break-word;hyphens:auto;padding:${paddingY}px ${paddingX}px;width:${contentWidth}px;background:#ffffff;border:${Math.max(1, baseFontSize * 0.08)}px solid #000000;border-radius:${Math.max(4, baseFontSize * 0.4)}px;box-shadow:0 0 20px rgba(0,0,0,0.4);z-index:1000;position:relative;display:flex;align-items:center;justify-content:center;box-sizing:content-box;">${displayLabel}</div>`,
             iconSize: [boxWidth, boxHeight],
@@ -4053,15 +4080,47 @@
           }),
           interactive: true,
           pane: "tooltipPane",
-        });
+        }).addTo(selectedLabelLayer);
 
-        // Attach tap-vs-swipe handling to avoid accidental clicks on touch devices
-        addTapHandlerToMarker(selMarker, () => {
-          flyTo(name);
-        });
-
-        selMarker.addTo(selectedLabelLayer);
         selectedLabelLayer.addTo(map);
+        // Attach touch handlers to selected label to prevent swipe from triggering click
+        (function attachSelectedTouch() {
+          const layers = selectedLabelLayer.getLayers();
+          if (!layers || layers.length === 0) return;
+          const mk = layers[layers.length - 1];
+          if (!mk) return;
+          let touchStartPos = null;
+          let touchMoved = false;
+          const threshold = 8;
+          function onTouchStart(e) {
+            touchMoved = false;
+            const t = e.touches && e.touches[0];
+            if (t) touchStartPos = { x: t.clientX, y: t.clientY };
+          }
+          function onTouchMove(e) {
+            const t = e.touches && e.touches[0];
+            if (!t || !touchStartPos) return;
+            const dx = Math.abs(t.clientX - touchStartPos.x);
+            const dy = Math.abs(t.clientY - touchStartPos.y);
+            if (dx > threshold || dy > threshold) touchMoved = true;
+          }
+          function onTouchEnd(e) {
+            if (touchMoved) return;
+            L.DomEvent.stopPropagation(e);
+            flyTo(name);
+          }
+          mk.on("click", function (e) {
+            L.DomEvent.stopPropagation(e);
+            flyTo(name);
+          });
+          mk.on("add", function () {
+            const el = mk._icon;
+            if (!el) return;
+            el.addEventListener("touchstart", onTouchStart, { passive: true });
+            el.addEventListener("touchmove", onTouchMove, { passive: true });
+            el.addEventListener("touchend", onTouchEnd);
+          });
+        })();
       }
 
       function hideSelectedLabel() {
@@ -4069,53 +4128,6 @@
           map.removeLayer(selectedLabelLayer);
           selectedLabelLayer = null;
         }
-      }
-
-      // Helper: attach tap-vs-swipe handler to a Leaflet marker
-      function addTapHandlerToMarker(marker, callback) {
-        // Handler will be attached once the marker's DOM icon exists
-        marker.on("add", function () {
-          const el = marker._icon;
-          if (!el) return;
-
-          let startX = 0,
-            startY = 0,
-            moved = false,
-            startTime = 0;
-
-          function onTouchStart(e) {
-            moved = false;
-            startTime = Date.now();
-            const t = e.touches && e.touches[0] ? e.touches[0] : e;
-            startX = t.clientX || t.pageX || 0;
-            startY = t.clientY || t.pageY || 0;
-          }
-
-          function onTouchMove(e) {
-            const t = e.touches && e.touches[0] ? e.touches[0] : e;
-            const dx = (t.clientX || t.pageX || 0) - startX;
-            const dy = (t.clientY || t.pageY || 0) - startY;
-            if (Math.sqrt(dx * dx + dy * dy) > 10) moved = true;
-          }
-
-          function onTouchEnd(e) {
-            const duration = Date.now() - startTime;
-            if (!moved && duration < 700) {
-              // treat as tap
-              L.DomEvent.stopPropagation(e);
-              callback();
-            }
-          }
-
-          el.addEventListener("touchstart", onTouchStart, { passive: true });
-          el.addEventListener("touchmove", onTouchMove, { passive: true });
-          el.addEventListener("touchend", onTouchEnd);
-
-          // For pointer events (stylus/mouse) also guard small drags
-          el.addEventListener("pointerdown", onTouchStart);
-          el.addEventListener("pointermove", onTouchMove);
-          el.addEventListener("pointerup", onTouchEnd);
-        });
       }
 
       function createLabels() {
@@ -4185,12 +4197,49 @@
               interactive: true,
             });
 
-            // Add click and touch-safe tap handler to show info and fly to barangay
-            marker.on("click", function (e) {
-              L.DomEvent.stopPropagation(e);
-              flyTo(name);
-            });
-            addTapHandlerToMarker(marker, () => flyTo(name));
+            // Add click handler to show info and fly to barangay
+            // Distinguish tap vs swipe for touch devices: ignore clicks if touch moved
+            (function attachTapSwipeHandlers(mk, nm) {
+              let touchStartPos = null;
+              let touchMoved = false;
+              const threshold = 8; // pixels
+
+              function onTouchStart(e) {
+                touchMoved = false;
+                const t = e.touches && e.touches[0];
+                if (t) touchStartPos = { x: t.clientX, y: t.clientY };
+              }
+
+              function onTouchMove(e) {
+                const t = e.touches && e.touches[0];
+                if (!t || !touchStartPos) return;
+                const dx = Math.abs(t.clientX - touchStartPos.x);
+                const dy = Math.abs(t.clientY - touchStartPos.y);
+                if (dx > threshold || dy > threshold) touchMoved = true;
+              }
+
+              function onTouchEnd(e) {
+                // if moved, treat as swipe and do not trigger click action
+                if (touchMoved) return;
+                L.DomEvent.stopPropagation(e);
+                flyTo(nm);
+              }
+
+              // Mouse/click fallback
+              mk.on("click", function (e) {
+                L.DomEvent.stopPropagation(e);
+                flyTo(nm);
+              });
+
+              // Attach touch listeners to the marker's DOM element when available
+              mk.on("add", function () {
+                const el = mk._icon;
+                if (!el) return;
+                el.addEventListener("touchstart", onTouchStart, { passive: true });
+                el.addEventListener("touchmove", onTouchMove, { passive: true });
+                el.addEventListener("touchend", onTouchEnd);
+              });
+            })(marker, name);
 
             // Add hover effects
             marker.on("mouseover", function () {
