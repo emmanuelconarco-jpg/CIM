@@ -39,6 +39,14 @@
         color: #ff8c00 !important;
         font-weight: 700 !important;
       }
+      /* Legend switch label color */
+      .switch-container[data-layer="legend"] .switch-label {
+        color: #8a9bb5 !important;
+      }
+      .switch-container[data-layer="legend"].active .switch-label {
+        color: #2d3f55 !important;
+        font-weight: 700 !important;
+      }
     </style>
   </head>
   <body>
@@ -270,6 +278,10 @@
             <div class="leg-item">
               <div class="leg-swatch" style="background: #ffff99"></div>
               Tinambacan (27)
+            </div>
+            <div class="leg-item">
+              <div class="leg-swatch" style="background: #ffffff; border: 1px solid #cfcfcf"></div>
+              Unmapped Areas
             </div>
           </div>
           <div
@@ -3469,12 +3481,13 @@
         const items = document.getElementById("legItems");
         if (currentMode === "district") {
           title.textContent = "District";
-          items.innerHTML = `
-      <div class="leg-item clickable" data-dist="Calbayog"><div class="leg-swatch" style="background:#99ccff"></div>Calbayog (84)</div>
-      <div class="leg-item clickable" data-dist="Oquendo"><div class="leg-swatch" style="background:#ff9999"></div>Oquendo (46)</div>
-      <div class="leg-item clickable" data-dist="Tinambacan"><div class="leg-swatch" style="background:#ffff99"></div>Tinambacan (27)</div>
-      <div class="leg-item"><div class="leg-swatch" style="background:#2ecc71;opacity:0.6"></div>Residential Areas</div>
-      <div class="leg-item"><div class="leg-swatch" style="background:#d35400"></div>Road Network</div>`;
+            items.innerHTML = `
+          <div class="leg-item clickable" data-dist="Calbayog"><div class="leg-swatch" style="background:#99ccff"></div>Calbayog (84)</div>
+          <div class="leg-item clickable" data-dist="Oquendo"><div class="leg-swatch" style="background:#ff9999"></div>Oquendo (46)</div>
+          <div class="leg-item clickable" data-dist="Tinambacan"><div class="leg-swatch" style="background:#ffff99"></div>Tinambacan (27)</div>
+          <div class="leg-item"><div class="leg-swatch" style="background:#ffffff;border:1px solid #cfcfcf"></div>Unmapped Areas</div>
+          <div class="leg-item"><div class="leg-swatch" style="background:#2ecc71;opacity:0.6"></div>Residential Areas</div>
+          <div class="leg-item"><div class="leg-swatch" style="background:#d35400"></div>Road Network</div>`;
           Array.from(items.querySelectorAll(".leg-item.clickable")).forEach(
             (el) => {
               el.classList.toggle(
