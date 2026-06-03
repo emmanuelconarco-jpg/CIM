@@ -4820,7 +4820,7 @@
         geoLayer = L.geoJSON(GEOJSON, {
           style(feat) {
             const isDefaultState = !document.getElementById("distFilter") || document.getElementById("distFilter").value === "";
-            const isSelected = !isDefaultState && feat.properties.BARANGAY === selectedName;
+            const isSelected = feat.properties.BARANGAY === selectedName;
             const inSelectedDistrict =
               selectedDistrict &&
               feat.properties.DISTRICT_N === selectedDistrict;
@@ -4883,34 +4883,38 @@
                 showInfo(p, layer);
                 showSelectedLabel(p.BARANGAY, feat);
                 
-                if (!isDefaultState) {
-                  geoLayer.setStyle((f) => ({
-                    fillColor:
-                      f.properties.BARANGAY === p.BARANGAY
-                        ? DC_ACTIVE[f.properties.DISTRICT_N] ||
-                          getFill(f.properties)
-                        : getFill(f.properties),
-                    fillOpacity:
-                      f.properties.BARANGAY === p.BARANGAY
-                        ? 0.60
-                        : f.properties.DISTRICT_N === selectedDistrict
+                geoLayer.setStyle((f) => ({
+                  fillColor:
+                    f.properties.BARANGAY === p.BARANGAY
+                      ? DC_ACTIVE[f.properties.DISTRICT_N] ||
+                        getFill(f.properties)
+                      : getFill(f.properties),
+                  fillOpacity:
+                    f.properties.BARANGAY === p.BARANGAY
+                      ? 0.60
+                      : selectedDistrict
+                        ? f.properties.DISTRICT_N === selectedDistrict
                           ? 0.6
-                          : 0.1,
-                    stroke: true,
-                    color:
-                      f.properties.BARANGAY === p.BARANGAY
-                        ? "rgba(255,255,255,0.9)"
-                        : f.properties.DISTRICT_N === selectedDistrict
+                          : 0.1
+                        : 0.20,
+                  stroke: true,
+                  color:
+                    f.properties.BARANGAY === p.BARANGAY
+                      ? "rgba(255,255,255,0.9)"
+                      : selectedDistrict
+                        ? f.properties.DISTRICT_N === selectedDistrict
                           ? "rgba(255,255,255,0.6)"
-                          : "rgba(255,255,255,0.18)",
-                    weight:
-                      f.properties.BARANGAY === p.BARANGAY
-                        ? 2.5
-                        : f.properties.DISTRICT_N === selectedDistrict
+                          : "rgba(255,255,255,0.18)"
+                        : "rgba(255,255,255,0.4)",
+                  weight:
+                    f.properties.BARANGAY === p.BARANGAY
+                      ? 2.5
+                      : selectedDistrict
+                        ? f.properties.DISTRICT_N === selectedDistrict
                           ? 1.8
-                          : 1,
-                  }));
-                }
+                          : 1
+                        : 1.3,
+                }));
               },
               mouseover(e) {
                 if (p.BARANGAY !== selectedName)
@@ -4976,7 +4980,7 @@
             latShift = Number((boundarySampleLat - sampleLat).toFixed(6));
           } else if (typeof sampleLat === 'number' && sampleLat < 12.12) {
             // Default small nudge (was positive); adjust downward slightly for better alignment
-            latShift = 0.00494111111111;; // move roads slightly downward
+            latShift = 0.00494111111111;; // byst nagkuri ak sine!!!
           }
 
           // Manual micro-adjustments requested by user: small rightward and downward tweak
@@ -5249,19 +5253,38 @@
           
           showInfo(feat.properties, layer);
           showSelectedLabel(name, feat);
-          
-          if (!isDefaultState) {
-            geoLayer.setStyle((f) => ({
-              fillColor:
-                f.properties.BARANGAY === name
-                  ? DC_ACTIVE[f.properties.DISTRICT_N] || getFill(f.properties)
-                  : getFill(f.properties),
-              fillOpacity: f.properties.BARANGAY === name ? 0.9 : 0.65,
-              stroke: f.properties.BARANGAY === name ? false : true,
-              color: "rgba(255,255,255,0.2)",
-              weight: 0.8,
-            }));
-          }
+
+          geoLayer.setStyle((f) => ({
+            fillColor:
+              f.properties.BARANGAY === name
+                ? DC_ACTIVE[f.properties.DISTRICT_N] || getFill(f.properties)
+                : getFill(f.properties),
+            fillOpacity:
+              f.properties.BARANGAY === name
+                ? 0.60
+                : selectedDistrict
+                  ? f.properties.DISTRICT_N === selectedDistrict
+                    ? 0.6
+                    : 0.1
+                  : 0.20,
+            stroke: true,
+            color:
+              f.properties.BARANGAY === name
+                ? "rgba(255,255,255,0.9)"
+                : selectedDistrict
+                  ? f.properties.DISTRICT_N === selectedDistrict
+                    ? "rgba(255,255,255,0.6)"
+                    : "rgba(255,255,255,0.18)"
+                  : "rgba(255,255,255,0.4)",
+            weight:
+              f.properties.BARANGAY === name
+                ? 2.5
+                : selectedDistrict
+                  ? f.properties.DISTRICT_N === selectedDistrict
+                    ? 1.8
+                    : 1
+                  : 1.3,
+          }));
         }
       }
 
