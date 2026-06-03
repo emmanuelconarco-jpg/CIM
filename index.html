@@ -274,6 +274,16 @@
       }
       .search-hint .hint-item:hover { background: var(--bg-panel-hover); transform: translateY(-1px); }
       .search-hint .no-results { color: var(--text-muted); }
+      @media (max-width: 767px) {
+        .search-hint {
+          max-width: calc(100% - 2rem);
+          font-size: 1rem;
+          padding: 0.6rem 0.8rem;
+          position: relative;
+          z-index: 2020;
+        }
+        .search-hint .hint-item { padding: 0.5rem 0.6rem; font-size: 1rem; }
+      }
 
       .search::placeholder {
         color: var(--text-muted);
@@ -6264,62 +6274,64 @@
       }[c] || c)); }
       // --- end helpers ---
       // Trigger search/selection when user presses Enter in the search box
-      document
-        .getElementById("searchBox")
-        .addEventListener("keydown", function (ev) {
-          if (ev.key === "Enter" || ev.keyCode === 13) {
-            ev.preventDefault();
-            const q = (this.value || "").trim().toLowerCase();
-            if (!q) return;
+      (function attachSearchEnterHandler(){
+        const input = document.getElementById('searchBox');
+        if (!input) return;
+        function processSearchEnter(ev) {
+          if (ev.key !== 'Enter' && ev.keyCode !== 13) return;
+          // On keydown, prevent default to stop form submission; on touch devices we handle on keyup
+          if (ev.type === 'keydown') ev.preventDefault();
+          const q = (input.value || '').trim().toLowerCase();
+          if (!q) return;
 
-            // Try exact match first, then startsWith, then includes
-            let match = null;
-            if (typeof GEOJSON !== 'undefined' && GEOJSON.features) {
+          // Try exact match first, then startsWith, then includes
+          let match = null;
+          if (typeof GEOJSON !== 'undefined' && GEOJSON.features) {
+            match = GEOJSON.features.find(
+              (f) => (f.properties.BARANGAY || '').toLowerCase() === q,
+            );
+            if (!match) {
               match = GEOJSON.features.find(
-                (f) => (f.properties.BARANGAY || "").toLowerCase() === q,
+                (f) => (f.properties.BARANGAY || '').toLowerCase().startsWith(q),
               );
-              if (!match) {
-                match = GEOJSON.features.find(
-                  (f) => (f.properties.BARANGAY || "").toLowerCase().startsWith(q),
-                );
-              }
-              if (!match) {
-                match = GEOJSON.features.find(
-                  (f) => (f.properties.BARANGAY || "").toLowerCase().includes(q),
-                );
-              }
             }
+            if (!match) {
+              match = GEOJSON.features.find(
+                (f) => (f.properties.BARANGAY || '').toLowerCase().includes(q),
+              );
+            }
+          }
 
-            if (match) {
-              const name = match.properties.BARANGAY;
-              // Ensure the list is rendered and then fly to the feature
-              renderList();
-              setTimeout(() => {
-                flyTo(name);
-                // Move focus away so pressing Enter again doesn't re-trigger unintentionally
-                this.blur();
-              }, 80);
-            } else {
-              // No exact/startsWith/includes match — try fuzzy suggestions
-              const suggestions = getClosestMatches(q, 4);
-              if (suggestions && suggestions.length > 0) {
-                // Determine a sensible threshold: allow small typos only
-                const best = suggestions[0];
-                const threshold = Math.max(1, Math.floor(Math.max(q.length, best.name.length) * 0.28));
-                if (best.dist <= threshold) {
-                  showSearchHint(suggestions, q);
-                } else {
-                  // Too different — show no results
-                  showSearchHint([], q, true);
-                }
+          if (match) {
+            const name = match.properties.BARANGAY;
+            // Ensure the list is rendered and then fly to the feature
+            renderList();
+            setTimeout(() => {
+              flyTo(name);
+              input.blur();
+            }, 80);
+          } else {
+            // No exact/startsWith/includes match — try fuzzy suggestions
+            const suggestions = getClosestMatches(q, 4);
+            if (suggestions && suggestions.length > 0) {
+              const best = suggestions[0];
+              const threshold = Math.max(1, Math.floor(Math.max(q.length, best.name.length) * 0.28));
+              if (best.dist <= threshold) {
+                showSearchHint(suggestions, q);
               } else {
                 showSearchHint([], q, true);
               }
-              // Still update the list to reflect typed filter
-              renderList();
+            } else {
+              showSearchHint([], q, true);
             }
+            renderList();
           }
-        });
+        }
+
+        const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints && navigator.maxTouchPoints > 0);
+        const eventType = isTouch ? 'keyup' : 'keydown';
+        input.addEventListener(eventType, processSearchEnter);
+      })();
       document
         .getElementById("distFilter")
         .addEventListener("change", function (e) {
