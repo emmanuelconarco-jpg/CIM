@@ -2015,7 +2015,7 @@
           attribution: "© OpenStreetMap · CARTO",
           maxZoom: 20,
         },
-      ).addTo(map);
+      );
 
       const darkTile = L.tileLayer(
         "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
@@ -2031,7 +2031,7 @@
           attribution: "© OpenStreetMap",
           maxZoom: 20,
         },
-      );
+      ).addTo(map);
 
       /* Dev Team Control backup start*/
       const DevTeamControl = L.Control.extend({
@@ -2065,9 +2065,9 @@
       L.control
         .layers(
           {
+            OpenStreetMap: osmTile,
             "Streets (CartoDB Positron)": streetTile,
             "Dark (CARTO)": darkTile,
-            OpenStreetMap: osmTile,
           },
           {},
           { position: "bottomright" },
