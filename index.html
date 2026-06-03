@@ -249,6 +249,32 @@
         font-family: inherit;
       }
 
+      /* Search suggestion hint box */
+      .search-hint {
+        margin-top: 0.4rem;
+        background: var(--bg-panel);
+        border: 1px solid var(--border-color);
+        color: var(--text-muted);
+        padding: 0.35rem 0.5rem;
+        border-radius: 8px;
+        box-shadow: var(--shadow-premium);
+        font-size: 0.9rem;
+        max-width: 26rem;
+      }
+      .search-hint .hint-title { display:block; font-weight:600; color:var(--text-accent); margin-bottom:0.25rem; }
+      .search-hint .hint-list { display:flex; gap:0.4rem; flex-wrap:wrap; }
+      .search-hint .hint-item {
+        background: transparent;
+        border: 1px solid transparent;
+        color: var(--text-accent);
+        padding: 0.25rem 0.45rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.18s ease, transform 0.12s ease;
+      }
+      .search-hint .hint-item:hover { background: var(--bg-panel-hover); transform: translateY(-1px); }
+      .search-hint .no-results { color: var(--text-muted); }
+
       .search::placeholder {
         color: var(--text-muted);
       }
@@ -376,20 +402,25 @@
         font-size: 0.9rem;
         cursor: pointer;
         backdrop-filter: var(--glass-blur);
-        transition: all 0.2s;
+        transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.18s ease, color 0.18s ease;
         white-space: nowrap;
         touch-action: manipulation;
+        box-shadow: var(--shadow-premium);
       }
 
       .cbtn:hover {
+        background: var(--bg-panel-hover);
         border-color: var(--text-accent);
         color: var(--text-accent);
+        box-shadow: 0 0 15px rgba(224, 123, 84, 0.36);
+        transform: scale(1.06);
       }
 
       .cbtn.active {
         background: var(--bg-panel-hover);
         border-color: var(--text-accent);
         color: var(--text-accent);
+        box-shadow: 0 0 14px rgba(224, 123, 84, 0.45), var(--shadow-premium);
       }
 
       .switch-container {
@@ -835,13 +866,13 @@
         justify-content: center;
         width: 2.2rem;
         height: 2.2rem;
-        background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
-        border: 1px solid rgba(255,255,255,0.15);
+        background: var(--bg-panel);
+        border: 1px solid var(--border-color);
         border-radius: var(--border-radius-md);
-        color: white;
+        color: var(--text-accent);
         font-size: 1.1rem;
         cursor: pointer;
-        transition: all 0.25s ease;
+        transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.18s ease;
         box-shadow: var(--shadow-premium);
         touch-action: manipulation;
       }
@@ -852,9 +883,11 @@
       }
 
       .devteam-ctrl-btn:hover {
-        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-        box-shadow: 0 0 15px rgba(124, 58, 237, 0.45);
-        transform: translateY(-2px);
+        background: var(--bg-panel-hover);
+        border-color: var(--text-accent);
+        box-shadow: 0 0 15px rgba(224, 123, 84, 0.36);
+        transform: scale(1.06) translateY(-2px);
+        color: var(--text-accent);
       }
 
       .devteam-ctrl-btn:active {
@@ -877,6 +910,20 @@
         z-index: 2010;
         opacity: 0;
         transition: opacity 0.3s ease;
+      }
+
+      /* When a modal is open, send other UI elements to the back (like 'send to back') */
+      body.modal-open header,
+      body.modal-open .sidebar,
+      body.modal-open .ctrl-bar,
+      body.modal-open .floating-restore-btn,
+      body.modal-open .map-stats-panel,
+      body.modal-open .bottom-panels {
+        z-index: 1000 !important;
+        pointer-events: none !important;
+        opacity: 0.94;
+        filter: blur(2px) saturate(0.95);
+        transition: opacity 0.18s ease, filter 0.18s ease;
       }
 
       .devteam-modal-overlay.active {
@@ -1450,8 +1497,8 @@
         position: absolute;
         top: 0.35rem;
         right: 0.5rem;
-        background: rgba(0, 0, 0, 0.38);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: var(--bg-panel);
+        border: 1px solid var(--border-color);
         color: var(--text-muted);
         width: 1.6rem;
         height: 1.6rem;
@@ -1462,7 +1509,7 @@
         cursor: pointer;
         font-size: 0.95rem;
         z-index: 10;
-        transition: all 0.18s ease;
+        transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, color 0.18s ease;
         line-height: 1;
       }
       .ui-close-btn:hover,
@@ -1475,10 +1522,10 @@
       .ip-close:focus-visible,
       .sidebar-close-btn:focus-visible {
         color: var(--text-accent);
-        background: rgba(0, 0, 0, 0.6);
+        background: var(--bg-panel-hover);
         border-color: var(--text-accent);
         outline: none;
-        box-shadow: 0 0 0 3px rgba(244,165,106,0.12);
+        box-shadow: 0 0 12px rgba(224, 123, 84, 0.28);
       }
 
       /* Sidebar close control should be hidden on non-mobile by default */
@@ -1739,6 +1786,7 @@
             id="searchBox"
             placeholder="Search barangay..."
           />
+          <div id="searchHint" class="search-hint" aria-live="polite" style="display:none"></div>
         </div>
         <div class="row2">
           <select class="sel" id="distFilter">
@@ -6136,6 +6184,142 @@
       document
         .getElementById("searchBox")
         .addEventListener("input", renderList);
+      // Clear any previous suggestions on input
+      document.getElementById("searchBox").addEventListener("input", clearSearchHint);
+
+      // --- Search suggestion helpers ---
+      function levenshtein(a, b) {
+        if (a === b) return 0;
+        a = a || ""; b = b || "";
+        const al = a.length, bl = b.length;
+        if (al === 0) return bl;
+        if (bl === 0) return al;
+        const v0 = new Array(bl + 1).fill(0);
+        const v1 = new Array(bl + 1).fill(0);
+        for (let i = 0; i <= bl; i++) v0[i] = i;
+        for (let i = 0; i < al; i++) {
+          v1[0] = i + 1;
+          for (let j = 0; j < bl; j++) {
+            const cost = a[i] === b[j] ? 0 : 1;
+            v1[j + 1] = Math.min(v1[j] + 1, v0[j + 1] + 1, v0[j] + cost);
+          }
+          for (let k = 0; k <= bl; k++) v0[k] = v1[k];
+        }
+        return v1[bl];
+      }
+
+      function getClosestMatches(q, maxResults = 3) {
+        if (!q || typeof GEOJSON === 'undefined' || !GEOJSON.features) return [];
+        const nameSet = {};
+        const list = GEOJSON.features.map(f => (f.properties.BARANGAY || '').trim()).filter(Boolean);
+        const results = list.map(name => {
+          const dist = levenshtein(q, name.toLowerCase());
+          return { name, dist };
+        }).sort((a,b) => a.dist - b.dist).filter(Boolean);
+        // dedupe and return top
+        const out = [];
+        for (let i=0;i<results.length && out.length<maxResults;i++){
+          if (!nameSet[results[i].name]){
+            nameSet[results[i].name]=1; out.push(results[i]);
+          }
+        }
+        return out;
+      }
+
+      function showSearchHint(suggestions, query, noResults=false) {
+        const el = document.getElementById('searchHint');
+        if (!el) return;
+        el.innerHTML = '';
+        if (noResults) {
+          el.style.display = 'block';
+          el.innerHTML = `<div class="no-results">No matches found for "${escapeHtml(query)}"</div>`;
+          return;
+        }
+        if (!suggestions || suggestions.length === 0) { el.style.display='none'; return; }
+        el.style.display = 'block';
+        const title = document.createElement('div'); title.className='hint-title'; title.textContent = 'Did you mean:';
+        el.appendChild(title);
+        const list = document.createElement('div'); list.className='hint-list';
+        suggestions.forEach(s => {
+          const btn = document.createElement('button');
+          btn.type = 'button'; btn.className = 'hint-item'; btn.textContent = s.name;
+          btn.addEventListener('click', () => {
+            document.getElementById('searchBox').value = s.name;
+            clearSearchHint();
+            renderList();
+            setTimeout(() => { flyTo(s.name); document.getElementById('searchBox').blur(); }, 60);
+          });
+          list.appendChild(btn);
+        });
+        el.appendChild(list);
+      }
+
+      function clearSearchHint() {
+        const el = document.getElementById('searchHint');
+        if (!el) return; el.innerHTML = ''; el.style.display = 'none';
+      }
+
+      function escapeHtml(str) { return String(str).replace(/[&<>"']/g, c=>({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'
+      }[c] || c)); }
+      // --- end helpers ---
+      // Trigger search/selection when user presses Enter in the search box
+      document
+        .getElementById("searchBox")
+        .addEventListener("keydown", function (ev) {
+          if (ev.key === "Enter" || ev.keyCode === 13) {
+            ev.preventDefault();
+            const q = (this.value || "").trim().toLowerCase();
+            if (!q) return;
+
+            // Try exact match first, then startsWith, then includes
+            let match = null;
+            if (typeof GEOJSON !== 'undefined' && GEOJSON.features) {
+              match = GEOJSON.features.find(
+                (f) => (f.properties.BARANGAY || "").toLowerCase() === q,
+              );
+              if (!match) {
+                match = GEOJSON.features.find(
+                  (f) => (f.properties.BARANGAY || "").toLowerCase().startsWith(q),
+                );
+              }
+              if (!match) {
+                match = GEOJSON.features.find(
+                  (f) => (f.properties.BARANGAY || "").toLowerCase().includes(q),
+                );
+              }
+            }
+
+            if (match) {
+              const name = match.properties.BARANGAY;
+              // Ensure the list is rendered and then fly to the feature
+              renderList();
+              setTimeout(() => {
+                flyTo(name);
+                // Move focus away so pressing Enter again doesn't re-trigger unintentionally
+                this.blur();
+              }, 80);
+            } else {
+              // No exact/startsWith/includes match — try fuzzy suggestions
+              const suggestions = getClosestMatches(q, 4);
+              if (suggestions && suggestions.length > 0) {
+                // Determine a sensible threshold: allow small typos only
+                const best = suggestions[0];
+                const threshold = Math.max(1, Math.floor(Math.max(q.length, best.name.length) * 0.28));
+                if (best.dist <= threshold) {
+                  showSearchHint(suggestions, q);
+                } else {
+                  // Too different — show no results
+                  showSearchHint([], q, true);
+                }
+              } else {
+                showSearchHint([], q, true);
+              }
+              // Still update the list to reflect typed filter
+              renderList();
+            }
+          }
+        });
       document
         .getElementById("distFilter")
         .addEventListener("change", function (e) {
@@ -6230,11 +6414,11 @@
         selectedDistrict = null;
         selectedName = null;
         
-        // Ensure default basemap is active (Streets)
-        if (map && typeof streetTile !== 'undefined' && !map.hasLayer(streetTile)) {
-          map.addLayer(streetTile);
+        // Ensure default basemap is active (OpenStreetMap)
+        if (map && typeof osmTile !== 'undefined' && !map.hasLayer(osmTile)) {
+          map.addLayer(osmTile);
           if (typeof darkTile !== 'undefined' && map.hasLayer(darkTile)) map.removeLayer(darkTile);
-          if (typeof osmTile !== 'undefined' && map.hasLayer(osmTile)) map.removeLayer(osmTile);
+          if (typeof streetTile !== 'undefined' && map.hasLayer(streetTile)) map.removeLayer(streetTile);
         }
 
         // Repaint map to default colors and reload directory
@@ -6342,6 +6526,7 @@
 
       function openDevTeamModal() {
         document.getElementById("devteamModalOverlay").classList.add("active");
+        document.body.classList.add('modal-open');
         renderDevTeamGrid();
       }
 
@@ -6349,6 +6534,7 @@
         document
           .getElementById("devteamModalOverlay")
           .classList.remove("active");
+        document.body.classList.remove('modal-open');
       }
 
       // Close modal when clicking outside
