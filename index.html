@@ -1831,9 +1831,9 @@
             </label>
             <label class="switch-label" for="toggleSidebar">Show List</label>
           </div>
-          <div class="switch-container" data-layer="labels">
+          <div class="switch-container active" data-layer="labels">
             <label class="switch">
-              <input type="checkbox" id="btnLabels" onchange="toggleLabels()" />
+              <input type="checkbox" id="btnLabels" onchange="toggleLabels()" checked />
               <span class="slider"></span>
             </label>
             <label class="switch-label" for="btnLabels">Show Names</label>
@@ -2330,7 +2330,7 @@
       let roadsLayer = null;
       let selectedName = null;
       let selectedDistrict = null;
-      let labelsVisible = false;
+      let labelsVisible = true;
       let labelLayer = null;
       let selectedLabelLayer = null;
       let initialLoad = true;
@@ -6356,8 +6356,9 @@
       renderList();
       updateLegend();
       map.fitBounds(geoLayer.getBounds(), { padding: [10, 10] });
-      // Run label update but don't force-show labels on first load
+      // Run label update and show labels on first load if enabled
       updateLabelsOnZoom();
+      if (labelsVisible) createLabels();
       // initial load complete - allow zoom-driven forcing thereafter
       initialLoad = false;
       // Don't enable residential layer by default on load — user can toggle it
