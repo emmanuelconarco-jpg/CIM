@@ -2067,18 +2067,20 @@
         ro.observe(mapContainer);
       }
 
+      const CARTO_API_KEY = "cb1_57gq_1_eaa73d61a360fa97664c5502";
+
       const streetTile = L.tileLayer(
-        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+        `https://basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}{r}.png?key=${CARTO_API_KEY}`,
         {
-          attribution: "© OpenStreetMap · CARTO",
+          attribution: "© OpenStreetMap contributors · © CARTO",
           maxZoom: 20,
         },
       );
 
       const darkTile = L.tileLayer(
-        "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+        `https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png?key=${CARTO_API_KEY}`,
         {
-          attribution: "© OpenStreetMap · CARTO",
+          attribution: "© OpenStreetMap contributors · © CARTO",
           maxZoom: 20,
         },
       );
@@ -6517,11 +6519,11 @@
           role: "Information Technology Specialist",
           img: "http://calbayog.gov.ph/wp-content/uploads/2026/05/JOJI.jpg",
         },
-       /* {
+        {
           name: "Francis Mark Mawo",
           role: "Project Manager",
-          img: "http://calbayog.gov.ph/wp-content/uploads/2026/08/placeholder.jpg"
-        },*/
+          img: "http://calbayog.gov.ph/wp-content/uploads/2026/08/placeholder.jpg",
+        },
       ];
 
       function renderDevTeamGrid() {
